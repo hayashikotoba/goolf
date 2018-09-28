@@ -7,6 +7,15 @@
   <div id="app"></div>
 
   <script>
+    const plug_ageComponentB = state => component`
+      <ul>
+        <li>Name ${state.name}</li>
+      </ul>`; // TODO: bug with trailing whitespace, or any character after last
+    let state_ageComponentB = {
+      name: 'hey'
+    };
+    const ageComponentB = plug_ageComponentB(state_ageComponentB);
+
     const plug_ageComponent = state => component`
       <ul>
         <li>Time ${state.time}</li>
@@ -25,17 +34,23 @@
           Her name is here: ${state.first}, ${state.last}.
         </li>a
         <li>Ternary Expression: ${state.first == 'Amanda' ? 'First, Last' : 'Last, First'}
-        <li>Sub component: ${ageComponent}</li>
+        <li>${state.children}</li>
       </ul>`; // TODO: bug with trailing whitespace, or any character after last
     let state = {
       first: 'Amanda',
       last: 'Bob',
+      children: [ageComponent, ageComponentB]
     };
 
     setInterval(() => {
-      state = Object.assign(state, { first: state.last, last: state.first});
+      state = Object.assign(state, {
+        children: [
+          state.children[1],
+          state.children[0]
+        ]
+      });
       plug(state);
-    }, 300);
+    }, 3000);
 
     setInterval(() => {
       state_ageComponent = Object.assign(state_ageComponent, { time: Date.now(), random: Math.random() });

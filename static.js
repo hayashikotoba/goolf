@@ -98,6 +98,15 @@
   function updateSlot(slot, value) {
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
+    } else if (Array.isArray(value)) {
+      const parentNode = slot.parent;
+      while(parentNode.firstChild)
+        parentNode.removeChild(parentNode.firstChild);
+      const frag = new DocumentFragment();
+      for(let i = 0, len = value.length; i < len; ++i) {
+        frag.appendChild(value[i].cloneNode(true));
+      }
+      parentNode.appendChild(frag);
     } else {
       slot.node.nodeValue = value;
     }

@@ -17,6 +17,7 @@ characterized by persistent DOM structures.
 2. Users plugs in their own controller mechanism.
 3. Placeholders always have a parent node, and are not the root.
 4. Slots do not change type
+5. Slots containing array of Frags will not have siblings (as implementatino clear all children of parent)
 
 As correlary to (1), the number of slots are fixed, their nodes cacheable.
 
