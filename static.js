@@ -91,15 +91,15 @@
     frag.appendChild(arr[0]);
     return {
       frag,
-      placeholderNodes: placeholders
+      slots: placeholders.map(node => ({node, parent: node.parentNode}))
     };
   }
 
-  function updateSlot(node, value) {
+  function updateSlot(slot, value) {
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-      node.parentNode.replaceChild(value, node);
+      slot.node.parentNode.replaceChild(value, slot.node);
     } else {
-      node.nodeValue = value;
+      slot.node.nodeValue = value;
     }
   }
 
@@ -113,25 +113,25 @@
     let entry = cache.get(strings);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
-      const {frag, placeholderNodes} = parse(strings.join('foo'));
+      const {frag, slots} = parse(strings.join('foo'));
       cache.set(strings, {
         frag,
-        placeholderNodes,
+        slots,
         values
       });
-      for (let i = 0, len = placeholderNodes.length; i < len; ++i) {
-        updateSlot(placeholderNodes[i], values[i]);
+      for (let i = 0, len = slots.length; i < len; ++i) {
+        updateSlot(slots[i], values[i]);
       }
       return frag;
     } else {
-      let placeholderNodes = entry.placeholderNodes;
+      let slots = entry.slots;
       let previousValues = entry.values;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
         let value = values[i];
         if (previousValues[i] != value) {
           console.log(`Updating ${i}, from ${previousValues[i]} with ${value}`);
-          updateSlot(placeholderNodes[i], value);
+          updateSlot(slots[i], value);
           previousValues[i] = value;
         }
       }
