@@ -95,6 +95,14 @@
     };
   }
 
+  function updateSlot(node, value) {
+    if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+      node.parentNode.replaceChild(value, node);
+    } else {
+      node.nodeValue = value;
+    }
+  }
+
   const template = (container, ...rest) => {
     const frag = component(...rest);
     container.appendChild(frag);
@@ -112,13 +120,7 @@
         values
       });
       for (let i = 0, len = placeholderNodes.length; i < len; ++i) {
-        let value = values[i];
-        if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-          const child =  placeholderNodes[i];
-          child.parentNode.replaceChild(value, child);
-        } else {
-          placeholderNodes[i].nodeValue = value;
-        }
+        updateSlot(placeholderNodes[i], values[i]);
       }
       return frag;
     } else {
@@ -129,12 +131,7 @@
         let value = values[i];
         if (previousValues[i] != value) {
           console.log(`Updating ${i}, from ${previousValues[i]} with ${value}`);
-          if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-            const node =  placeholderNodes[i];
-            node.parentNode.replaceChild(value, node);
-          } else {
-            placeholderNodes[i].nodeValue = value;
-          }
+          updateSlot(placeholderNodes[i], value);
           previousValues[i] = value;
         }
       }
