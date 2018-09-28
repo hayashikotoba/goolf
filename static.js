@@ -39,10 +39,11 @@
     return res;
   };
 
-  function parse(html, placeholders) {
+  function parse(html) {
     let current;
     let level = -1;
     const arr = [];
+    const placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
       console.log('Level: ' + level);
       console.log('Tag: ' + tag);
@@ -86,10 +87,12 @@
       }
     });
 
-
     const frag = document.createDocumentFragment();
     frag.appendChild(arr[0]);
-    return frag;
+    return {
+      frag,
+      placeholderNodes: placeholders
+    };
   }
 
   let cache = new WeakMap();
@@ -97,8 +100,7 @@
     let entry = cache.get(strings);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
-      const placeholderNodes = [];
-      const frag = parse(strings.join('foo'), placeholderNodes);
+      const {frag, placeholderNodes} = parse(strings.join('foo'));
       container.appendChild(frag);
       cache.set(strings, {
         frag,
