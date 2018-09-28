@@ -69,14 +69,16 @@
   }
 
   function updateSlot(slot, value) {
+    console.log('updateSlot with value:' + value);
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
       const {parent} = slot;
       while(parent.firstChild) parent.removeChild(parent.firstChild);
       const frag = document.createDocumentFragment();
-      for(let i = 0, len = value.length; i < len; ++i)
+      for(let i = 0, len = value.length; i < len; ++i) {
         frag.appendChild(value[i].cloneNode(true));
+      }
       parent.appendChild(frag);
     } else {
       slot.node.nodeValue = value;
@@ -84,16 +86,21 @@
   }
 
   const template = (container, ...rest) => {
-    container.appendChild(component(...rest));
+    const appComponent = blueprint.bind(null, "#foo");
+    container.appendChild(appComponent(...rest));
   };
 
-  const cache = new WeakMap();
-  const component = (strings, ...values) => {
-    const entry = cache.get(strings);
+  const component = id => {
+    return blueprint.bind(null, id);
+  }
+
+  const cache = new Map();
+  const blueprint = (id, strings, ...values) => {
+    const entry = cache.get(id);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
       const {frag, slots} = parse(strings.join('foo'));
-      cache.set(strings, {
+      cache.set(id, {
         frag,
         slots,
         values
@@ -115,8 +122,9 @@
       return frag;
     }
   };
-  window.app = container => {
-    return template.bind(null, container);
+  window.StaticJs = {
+    $component: component,
+    $blueprint:  blueprint,
+    $app:  container => template.bind(null, container),
   };
-  window.component = component;
 })();

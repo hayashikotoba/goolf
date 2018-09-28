@@ -7,28 +7,27 @@
   <div id="app"></div>
 
   <script>
-    const plug_ageComponentB = state => component`
-      <ul>
-        <li>Name ${state.name}</li>
-      </ul>`; // TODO: bug with trailing whitespace, or any character after last
-    let state_ageComponentB = {
-      name: 'hey'
-    };
-    const ageComponentB = plug_ageComponentB(state_ageComponentB);
+    const {$component, $app} = window.StaticJs;
 
-    const plug_ageComponent = state => component`
+    const blueprint_b = $component("#b");
+    const plug_b = state => blueprint_b`<ul><li>Name ${state.name}</li></ul>`;
+    let state_b = { name: 'hey' };
+    const component_b = plug_b(state_b);
+
+    const blueprint_a = $component("#a");
+    const plug_a = state => blueprint_a`
       <ul>
         <li>Time ${state.time}</li>
         <li>Random:${state.random}</li>
-      </ul>`; // TODO: bug with trailing whitespace, or any character after last
-    let state_ageComponent = {
+      </ul>`;
+    let state_a = {
       random: 5,
       time: 7,
     };
-    const ageComponent = plug_ageComponent(state_ageComponent);
+    const component_a = plug_a(state_a);
 
-    const app = window.app(document.getElementById('app'));
-    let plug = state => app`
+    const blueprint_app = $app(document.getElementById('app'));
+    let plug = state => blueprint_app`
       <ul>
         <li>
           Her name is here: ${state.first}, ${state.last}.
@@ -39,7 +38,7 @@
     let state = {
       first: 'Amanda',
       last: 'Bob',
-      children: [ageComponent, ageComponentB]
+      children: [component_a, component_b]
     };
 
     setInterval(() => {
@@ -53,8 +52,8 @@
     }, 3000);
 
     setInterval(() => {
-      state_ageComponent = Object.assign(state_ageComponent, { time: Date.now(), random: Math.random() });
-      plug_ageComponent(state_ageComponent);
+      state_b = Object.assign(state_b, { time: Date.now(), random: Math.random() });
+      plug_b(state_b);
     }, 500);
   </script>
 </body>
