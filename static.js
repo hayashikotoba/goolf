@@ -33,7 +33,7 @@
           res.attrs[key] = match.replace(/['"]/g, '');
         }
       }
-      i++;
+      ++i;
     });
     return res;
   };
@@ -62,7 +62,7 @@
           const tokens = content.split('foo');
           currNode.appendChild(document.createTextNode(tokens[0]));
           // Fencepost.
-          for (let i = 1; i < tokens.length; i++) {
+          for (let i = 1, len = tokens.length; i < len; ++i) {
             const element = document.createTextNode('foo');
             currNode.appendChild(element);
             placeholders.push(element);
@@ -107,13 +107,13 @@
         placeholderNodes,
         values
       });
-      for (let i = 0; i < placeholderNodes.length; i++)
+      for (let i = 0, len = placeholderNodes.length; i < len; ++i)
         placeholderNodes[i].nodeValue = values[i];
     } else {
       let placeholderNodes = entry.placeholderNodes;
       let previousValues = entry.values;
       // Updated DIFFed nodes.
-      for (let i = 0; i < previousValues.length; i++) {
+      for (let i = 0, len = previousValues.length; i < len; ++i) {
         if (previousValues[i] != values[i]) {
           console.log(`Updating ${i}, from ${previousValues[i]} with ${values[i]}`);
           placeholderNodes[i].nodeValue = values[i];
