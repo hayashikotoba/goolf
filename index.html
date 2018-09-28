@@ -5,24 +5,40 @@
 </head>
 <body>
   <div id="app"></div>
+
   <script>
-    const sockets = window.app(document.getElementById('app'));
-    let plug = state => sockets`
+    const plug_ageComponent = state => component`
+      <ul>
+        <li>Time ${state.time}</li>
+        <li>Random:${state.random}</li>
+      </ul>`; // TODO: bug with trailing whitespace, or any character after last
+    let state_ageComponent = {
+      random: 5,
+      time: 7,
+    };
+    const ageComponent = plug_ageComponent(state_ageComponent);
+
+    const app = window.app(document.getElementById('app'));
+    let plug = state => app`
       <ul>
         <li>
-          His name was ${state.first}, ${state.last}.
+          Her name is here: ${state.first}, ${state.last}.
         </li>a
-        <li>Random:${state.random}</li>
-        <li>${state.time}</li>
+        <li>Sub component: ${ageComponent}</li>
       </ul>`; // TODO: bug with trailing whitespace, or any character after last
     let state = {
       first: 'Amanda',
-      random: 0,
-      time: 0,
+      last: 'Bob',
     };
+
     setInterval(() => {
-      state = Object.assign(state, { time: Date.now(), random: Math.random() });
+      state = Object.assign(state, { first: state.last, last: state.first});
       plug(state);
+    }, 300);
+
+    setInterval(() => {
+      state_ageComponent = Object.assign(state_ageComponent, { time: Date.now(), random: Math.random() });
+      plug_ageComponent(state_ageComponent);
     }, 500);
   </script>
 </body>

@@ -95,34 +95,54 @@
     };
   }
 
+  const template = (container, ...rest) => {
+    const frag = component(...rest);
+    container.appendChild(frag);
+  };
+
   let cache = new WeakMap();
-  const template = (container, strings, ...values) => {
+  const component = (strings, ...values) => {
     let entry = cache.get(strings);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
       const {frag, placeholderNodes} = parse(strings.join('foo'));
-      container.appendChild(frag);
       cache.set(strings, {
         frag,
         placeholderNodes,
         values
       });
-      for (let i = 0, len = placeholderNodes.length; i < len; ++i)
-        placeholderNodes[i].nodeValue = values[i];
+      for (let i = 0, len = placeholderNodes.length; i < len; ++i) {
+        let value = values[i];
+        if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+          const child =  placeholderNodes[i];
+          child.parentNode.replaceChild(value, child);
+        } else {
+          placeholderNodes[i].nodeValue = value;
+        }
+      }
+      return frag;
     } else {
       let placeholderNodes = entry.placeholderNodes;
       let previousValues = entry.values;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
-        if (previousValues[i] != values[i]) {
-          console.log(`Updating ${i}, from ${previousValues[i]} with ${values[i]}`);
-          placeholderNodes[i].nodeValue = values[i];
-          previousValues[i] = values[i];
+        let value = values[i];
+        if (previousValues[i] != value) {
+          console.log(`Updating ${i}, from ${previousValues[i]} with ${value}`);
+          if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+            const node =  placeholderNodes[i];
+            node.parentNode.replaceChild(value, node);
+          } else {
+            placeholderNodes[i].nodeValue = value;
+          }
+          previousValues[i] = value;
         }
       }
+      return entry.frag;
     }
   };
   window.app = container => {
     return template.bind(null, container);
-  }
+  };
+  window.component = component;
 })();
