@@ -2,35 +2,19 @@
   const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
   const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-  const voidElements = new Set(
-    'br',
-    'col',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta');
+  const voidElements = new Set('br','col','hr','img','input','link','meta');
 
   function parseTag(tag) {
-    let i = 0;
-    let key;
-    const res = {
-      name: '',
-      voidElement: false,
-      attrs: {},
-    };
+    let i = 0, key;
+    const res = { name: '' , voidElement: false, attrs: {} };
     tag.replace(ATTR_REGEX, function (match) {
       if (i % 2) {
         key = match;
+      } else if (i === 0) {
+        if (voidElements.has(match) || tag.charAt(tag.length - 2) === '/') res.voidElement = true;
+        res.name = match;
       } else {
-        if (i === 0) {
-          if (voidElements.has(match) || tag.charAt(tag.length - 2) === '/') {
-            res.voidElement = true;
-          }
-          res.name = match;
-        } else {
-          res.attrs[key] = match.replace(/['"]/g, '');
-        }
+        res.attrs[key] = match.replace(/['"]/g, '');
       }
       ++i;
     });
@@ -39,12 +23,11 @@
 
   function parse(html) {
     let level = -1;
-    const arr = [];
-    const placeholders = [];
+    const arr = [], placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
-      const isOpen = tag.charAt(1) !== '/';
-      const start = index + tag.length;
-      const nextChar = html.charAt(start);
+      const isOpen = tag.charAt(1) !== '/',
+          start = index + tag.length,
+          nextChar = html.charAt(start);
       let voidElement;
       if (isOpen) {
         level++;
@@ -55,19 +38,15 @@
           const content = html.slice(start, html.indexOf('<', start));
           const tokens = content.split('foo');
           currNode.appendChild(document.createTextNode(tokens[0]));
-          // Fencepost.
           for (let i = 1, len = tokens.length; i < len; ++i) {
             const element = document.createTextNode('foo');
             currNode.appendChild(element);
             placeholders.push(element);
-
             currNode.appendChild(document.createTextNode(tokens[i]));
           }
         }
         const parent = arr[level - 1];
-        if (parent) {
-          parent.append(currNode);
-        }
+        if (parent) parent.append(currNode);
         arr[level] = currNode;
       }
       if (!isOpen || voidElement) {
@@ -94,9 +73,8 @@
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
       const {parent} = slot;
-      while(parent.firstChild)
-        parent.removeChild(parent.firstChild);
-      const frag = new DocumentFragment();
+      while(parent.firstChild) parent.removeChild(parent.firstChild);
+      const frag = document.createDocumentFragment();
       for(let i = 0, len = value.length; i < len; ++i)
         frag.appendChild(value[i].cloneNode(true));
       parent.appendChild(frag);
@@ -106,8 +84,7 @@
   }
 
   const template = (container, ...rest) => {
-    const frag = component(...rest);
-    container.appendChild(frag);
+    container.appendChild(component(...rest));
   };
 
   const cache = new WeakMap();
