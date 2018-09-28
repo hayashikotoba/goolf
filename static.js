@@ -3,22 +3,13 @@
   const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
   const voidElements = new Set(
-    'area',
-    'base',
     'br',
     'col',
-    'embed',
     'hr',
     'img',
     'input',
-    'keygen',
     'link',
-    'menuitem',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr');
+    'meta');
 
   function parseTag(tag) {
     let i = 0;
