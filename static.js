@@ -18,7 +18,6 @@
       name: '',
       voidElement: false,
       attrs: {},
-      children: []
     };
     tag.replace(ATTR_REGEX, function (match) {
       if (i % 2) {
