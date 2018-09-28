@@ -15,7 +15,6 @@
     let i = 0;
     let key;
     const res = {
-      type: 'tag',
       name: '',
       voidElement: false,
       attrs: {},
