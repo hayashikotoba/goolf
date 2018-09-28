@@ -43,8 +43,6 @@
     const arr = [];
     const placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
-      console.log('Level: ' + level);
-      console.log('Tag: ' + tag);
       var isOpen = tag.charAt(1) !== '/';
       var start = index + tag.length;
       var nextChar = html.charAt(start);
@@ -58,7 +56,6 @@
         currNode = document.createElement(name);
         if (!voidElement && nextChar && nextChar !== '<') {
           const content = html.slice(start, html.indexOf('<', start));
-          console.log(content);
           const tokens = content.split('foo');
           currNode.appendChild(document.createTextNode(tokens[0]));
           // Fencepost.
@@ -99,14 +96,13 @@
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
-      const parentNode = slot.parent;
-      while(parentNode.firstChild)
-        parentNode.removeChild(parentNode.firstChild);
+      const {parent} = slot;
+      while(parent.firstChild)
+        parent.removeChild(parent.firstChild);
       const frag = new DocumentFragment();
-      for(let i = 0, len = value.length; i < len; ++i) {
+      for(let i = 0, len = value.length; i < len; ++i)
         frag.appendChild(value[i].cloneNode(true));
-      }
-      parentNode.appendChild(frag);
+      parent.appendChild(frag);
     } else {
       slot.node.nodeValue = value;
     }
@@ -139,7 +135,6 @@
       for (let i = 0, len = previousValues.length; i < len; ++i) {
         let value = values[i];
         if (previousValues[i] != value) {
-          console.log(`Updating ${i}, from ${previousValues[i]} with ${value}`);
           updateSlot(slots[i], value);
           previousValues[i] = value;
         }
