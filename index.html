@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>Demo of Static.JS</title>
+  <script src="./static.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const sockets = window.app(document.getElementById('app'));
+    let plug = state => sockets`
+      <ul>
+        <li>
+          His name was ${state.first}, ${state.last}.
+        </li>a
+        <li>Random:${state.random}</li>
+        <li>${state.time}</li>
+      </ul>`; // TODO: bug with trailing whitespace, or any character after last
+    let state = {
+      first: 'Amanda',
+      random: 0,
+      time: 0,
+    };
+    setInterval(() => {
+      state = Object.assign(state, { time: Date.now(), random: Math.random() });
+      plug(state);
+    }, 500);
+  </script>
+</body>
+</html>
