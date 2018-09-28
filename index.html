@@ -26,6 +26,19 @@
     };
     const component_a = plug_a(state_a);
 
+    const components = [];
+    const states = [];
+    const plugs = [];
+    for(let i = 0 ; i < 5; ++i) {
+      const blueprint = $component("#" + i);
+      const plug = state => blueprint`<p>${state.num}</p>`;
+      const state = {num: i};
+      const component = plug(state);
+      states.push(state);
+      components.push(component);
+      plugs.push(plug);
+    }
+
     const blueprint_app = $app(document.getElementById('app'));
     let plug = state => blueprint_app`
       <ul>
@@ -33,27 +46,35 @@
           Her name is here: ${state.first}, ${state.last}.
         </li>a
         <li>Ternary Expression: ${state.first == 'Amanda' ? 'First, Last' : 'Last, First'}
+        <li>${state.childA}</li>
+        <li>${state.childB}</li>
         <li>${state.children}</li>
       </ul>`; // TODO: bug with trailing whitespace, or any character after last
     let state = {
       first: 'Amanda',
       last: 'Bob',
-      children: [component_a, component_b]
+      childA: component_a,
+      childB: component_b,
+      children: components
     };
 
+    let i = 0;
     setInterval(() => {
-      state = Object.assign(state, {
-        children: [
-          state.children[1],
-          state.children[0]
-        ]
-      });
+      console.log('Plugging app');
+      if(i % 5 == 0) {
+        for(let i = 0; i < components.length; i++) {
+          const state = states[i];
+          state.num++;
+          components[i] = plugs[i](state);
+        }
+      }
+      i++;
       plug(state);
     }, 3000);
 
     setInterval(() => {
-      state_b = Object.assign(state_b, { time: Date.now(), random: Math.random() });
-      plug_b(state_b);
+      state_a = Object.assign(state_b, { time: Date.now(), random: Math.random() });
+      plug_a(state_a);
     }, 500);
   </script>
 </body>
