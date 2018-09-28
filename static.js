@@ -127,8 +127,7 @@
       }
       return frag;
     } else {
-      const slots = entry.slots;
-      const previousValues = entry.values;
+      const {slots, values: previousValues, frag} = entry;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
         const value = values[i];
@@ -137,7 +136,7 @@
           previousValues[i] = value;
         }
       }
-      return entry.frag;
+      return frag;
     }
   };
   window.app = container => {
