@@ -40,7 +40,6 @@
   };
 
   function parse(html, placeholders) {
-    const result = [];
     let current;
     let level = -1;
     const arr = [];
@@ -69,9 +68,6 @@
 
             currNode.appendChild(document.createTextNode(tokens[i]));
           }
-        }
-        if (level === 0) { // if we're at root, push new base node
-          result.push(current);
         }
         parent = arr[level - 1];
         if (parent) {
