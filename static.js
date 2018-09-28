@@ -39,7 +39,7 @@
     return res;
   };
 
-  function parse(html) {
+  function parse(html, placeholders) {
     const result = [];
     let current;
     let level = -1;
@@ -51,27 +51,23 @@
       var start = index + tag.length;
       var nextChar = html.charAt(start);
       var parent;
+      let currNode;
       if (isOpen) {
         level++;
         current = parseTag(tag);
+        currNode = document.createElement(current.name);
         if (!current.voidElement && nextChar && nextChar !== '<') {
           const content = html.slice(start, html.indexOf('<', start));
           console.log(content);
           const tokens = content.split('foo');
-          current.children.push({
-            type: 'text',
-            content: tokens[0]
-          });
+          currNode.appendChild(document.createTextNode(tokens[0]));
           // Fencepost.
           for (let i = 1; i < tokens.length; i++) {
-            current.children.push({
-              type: 'placeholder',
-              content: 'foo'
-            });
-            current.children.push({
-              type: 'text',
-              content: tokens[i]
-            });
+            const element = document.createTextNode('foo');
+            currNode.appendChild(element);
+            placeholders.push(element);
+
+            currNode.appendChild(document.createTextNode(tokens[i]));
           }
         }
         if (level === 0) { // if we're at root, push new base node
@@ -79,44 +75,25 @@
         }
         parent = arr[level - 1];
         if (parent) {
-          parent.children.push(current);
+          parent.append(currNode);
         }
-        arr[level] = current;
+        arr[level] = currNode;
       }
       if (!isOpen || current.voidElement) {
         level--;
         if (nextChar !== '<' && nextChar) {
           // trailing text node
-          arr[level].children.push({
-            type: 'text',
-            content: html.slice(start, html.indexOf('<', start))
-          });
+          arr[level].appendChild(
+              document.createTextNode(
+                html.slice(start, html.indexOf('<', start))));
         }
       }
     });
-    return result;
-  };
 
-  function appendChild(parentEl, children, placeholderNodes) {
-    for (var i = 0; i < children.length; i++) {
-      const child = children[i];
-      const type = child.type;
-      console.log(child);
-      let element;
-      if (type == 'tag') {
-        element = document.createElement(child.name);
-      } else if (type == 'placeholder') {
-        element = document.createTextNode(child.content);
-        placeholderNodes.push(element);
-      } else if (type == 'text') {
-        element = document.createTextNode(child.content);
-      }
 
-      parentEl.append(element);
-      if (child.children) {
-        appendChild(element, child.children, placeholderNodes);
-      }
-    }
+    const frag = document.createDocumentFragment();
+    frag.appendChild(arr[0]);
+    return frag;
   }
 
   let cache = new WeakMap();
@@ -124,10 +101,8 @@
     let entry = cache.get(strings);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
-      const frag = document.createDocumentFragment();
-      const ast = parse(strings.join('foo'));
       const placeholderNodes = [];
-      appendChild(frag, ast, placeholderNodes);
+      const frag = parse(strings.join('foo'), placeholderNodes);
       container.appendChild(frag);
       cache.set(strings, {
         frag,
