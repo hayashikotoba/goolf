@@ -39,7 +39,6 @@
   };
 
   function parse(html) {
-    let current;
     let level = -1;
     const arr = [];
     const placeholders = [];
@@ -49,13 +48,15 @@
       var isOpen = tag.charAt(1) !== '/';
       var start = index + tag.length;
       var nextChar = html.charAt(start);
+      let name;
+      let voidElement;
       var parent;
       let currNode;
       if (isOpen) {
         level++;
-        current = parseTag(tag);
-        currNode = document.createElement(current.name);
-        if (!current.voidElement && nextChar && nextChar !== '<') {
+        ({name, voidElement} = parseTag(tag));
+        currNode = document.createElement(name);
+        if (!voidElement && nextChar && nextChar !== '<') {
           const content = html.slice(start, html.indexOf('<', start));
           console.log(content);
           const tokens = content.split('foo');
@@ -75,7 +76,7 @@
         }
         arr[level] = currNode;
       }
-      if (!isOpen || current.voidElement) {
+      if (!isOpen || voidElement) {
         level--;
         if (nextChar !== '<' && nextChar) {
           // trailing text node
