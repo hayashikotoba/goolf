@@ -43,17 +43,15 @@
     const arr = [];
     const placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
-      var isOpen = tag.charAt(1) !== '/';
-      var start = index + tag.length;
-      var nextChar = html.charAt(start);
-      let name;
+      const isOpen = tag.charAt(1) !== '/';
+      const start = index + tag.length;
+      const nextChar = html.charAt(start);
       let voidElement;
-      var parent;
-      let currNode;
       if (isOpen) {
         level++;
+        let name;
         ({name, voidElement} = parseTag(tag));
-        currNode = document.createElement(name);
+        const currNode = document.createElement(name);
         if (!voidElement && nextChar && nextChar !== '<') {
           const content = html.slice(start, html.indexOf('<', start));
           const tokens = content.split('foo');
@@ -67,7 +65,7 @@
             currNode.appendChild(document.createTextNode(tokens[i]));
           }
         }
-        parent = arr[level - 1];
+        const parent = arr[level - 1];
         if (parent) {
           parent.append(currNode);
         }
@@ -113,9 +111,9 @@
     container.appendChild(frag);
   };
 
-  let cache = new WeakMap();
+  const cache = new WeakMap();
   const component = (strings, ...values) => {
-    let entry = cache.get(strings);
+    const entry = cache.get(strings);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
       const {frag, slots} = parse(strings.join('foo'));
@@ -129,11 +127,11 @@
       }
       return frag;
     } else {
-      let slots = entry.slots;
-      let previousValues = entry.values;
+      const slots = entry.slots;
+      const previousValues = entry.values;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
-        let value = values[i];
+        const value = values[i];
         if (previousValues[i] != value) {
           updateSlot(slots[i], value);
           previousValues[i] = value;
