@@ -68,16 +68,10 @@
     };
   }
 
-  function updateSlot(slot, value, firstTime) {
+  function updateSlot(slot, value) {
     console.log('updateSlot with value:' + value);
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
-    } else if (firstTime && Array.isArray(value)) {
-      const {parent} = slot;
-      const frag = document.createDocumentFragment();
-      for(let i = 0, len = value.length; i < len; ++i)
-        frag.appendChild(value[i]);
-      parent.appendChild(frag);
     } else {
       slot.node.nodeValue = value;
     }
@@ -104,7 +98,15 @@
         values
       });
       for (let i = 0, len = slots.length; i < len; ++i) {
-        updateSlot(slots[i], values[i], true);
+        const value = values[i];
+        if(Array.isArray(value)) {
+          const frag = document.createDocumentFragment();
+          for(let i = 0, len = value.length; i < len; ++i)
+            frag.appendChild(value[i]);
+          slots[i].parent.appendChild(frag);
+        } else {
+          updateSlot(slots[i], value, true);
+        }
       }
       return frag;
     } else {
