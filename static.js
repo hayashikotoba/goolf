@@ -111,23 +111,14 @@
       return frag;
     } else {
       const {slots, values: previousValues, frag} = entry;
-      let dirty = false;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
         const value = values[i];
         if (previousValues[i] != value) {
           updateSlot(slots[i], value);
-          dirty = true;
           previousValues[i] = value;
-        } else if (Array.isArray(value) && value.some(component => component.dirty)) {
-          for(let i = 0 ; i < value.length; i++)
-            value[i].dirty = false;
-           // TODO: replace only dirty children.
-          updateSlot(slots[i], value);
-          dirty = true;
         }
       }
-      frag.dirty = dirty;
       return frag;
     }
   };
