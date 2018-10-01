@@ -84,6 +84,38 @@ test('updating subcomponent after adding to parent', () => {
   expect(html2).toBe("<div><div>2</div></div>");
 });
 
+test('slot of empty array', () => {
+  const blueprintParent = $component(randomId());
+  const fragParent = blueprintParent`<div>${[]}</div>`;
+
+  const html = fragToHtml(fragParent);
+  expect(html).toBe('<div>foo</div>')
+});
+
+test('slot of single element array', () => {
+  const blueprintChild = $component(randomId());
+  const fragChild = blueprintChild`<p></p>`;
+
+  const blueprintParent = $component(randomId());
+  const fragParent = blueprintParent`<div>${[fragChild]}</div>`;
+
+  const html = fragToHtml(fragParent);
+  expect(html).toBe('<div>foo<p></p></div>')
+});
+
+test('slot of n-element array', () => {
+  const blueprintChildA = $component(randomId());
+  const fragChildA = blueprintChildA`<p></p>`;
+  const blueprintChildB = $component(randomId());
+  const fragChildB = blueprintChildB`<span></span>`;
+
+  const blueprintParent = $component(randomId());
+  const fragParent = blueprintParent`<div>${[fragChildA, fragChildB]}</div>`;
+
+  const html = fragToHtml(fragParent);
+  expect(html).toBe('<div>foo<p></p><span></span></div>')
+});
+
 // Fix. 4th slot not being replaced.
 test('with slot as last child', () => {
   const blueprint_b = $component(randomId());
