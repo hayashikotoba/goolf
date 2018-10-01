@@ -1,0 +1,23 @@
+{
+  "name": "framework",
+  "version": "1.0.0",
+  "description": "Static.js is a minimalist JavaScript nano ViewModel framework for building stateful web applications characterized by persistent DOM structures.",
+  "main": "static.js",
+  "dependencies": {
+    "jest": "^23.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alephnan/static.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alephnan/static.js/issues"
+  },
+  "homepage": "https://github.com/alephnan/static.js#readme"
+}
