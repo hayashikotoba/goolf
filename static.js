@@ -131,9 +131,13 @@
       return frag;
     }
   };
-  window.StaticJs = {
+  const StaticJs = {
     $component: component,
     $blueprint:  blueprint,
     $app:  container => template.bind(null, container),
   };
+  window.StaticJs = StaticJs;
+  if(module) {
+    module.exports = StaticJs;
+  }
 })();
