@@ -29,12 +29,14 @@
   function splitContent(html, start, parentNode, placeholders) {
     const content = html.slice(start, html.indexOf('<', start))
     const tokens = content.split(DELIMITER);
-    parentNode.appendChild(document.createTextNode(tokens[0]));
+    if(tokens[0].trim().length > 0)
+      parentNode.appendChild(document.createTextNode(tokens[0]));
     for (let i = 1, len = tokens.length; i < len; ++i) {
       const element = document.createTextNode(DELIMITER);
       parentNode.appendChild(element);
       placeholders.push(element);
-      parentNode.appendChild(document.createTextNode(tokens[i]));
+      if(tokens[i].trim().length > 0)
+        parentNode.appendChild(document.createTextNode(tokens[i]));
     }
   }
 

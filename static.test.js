@@ -26,13 +26,13 @@ test('one slots', () => {
 });
 
 test('multiple slots', () => {
-  const frag = $component()`<div> A ${1} , B: ${2} , C: ${3} </div>`;
-  expectHtml(frag).toBe('<div> A 1 , B: 2 , C: 3 </div>')
+  const frag = $component()`<div> A ${1} , B: ${2} , C: ${3}</div>`;
+  expectHtml(frag).toBe('<div> A 1 , B: 2 , C: 3</div>')
 });
 
 test('with childen', () => {
   const frag = $component()`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li></ul></div>`;
-  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul></div>');
+  expectHtml(frag).toBe('<div>1<ul><li>A <span>2</span> B</li><li>3</li></ul></div>');
 });
 
 test('subcomponent', () => {
@@ -101,13 +101,13 @@ test('updating slot of array', () => {
 test('with slot as last child', () => {
   const blueprint = $component();
   const frag = blueprint`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li>  ${4}  </ul></div>`;
-  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li>  4  </ul></div>');
+  expectHtml(frag).toBe('<div>1<ul><li>A <span>2</span> B</li><li>3</li>4</ul></div>');
 });
 
 test('with slot as last child 2', () => {
   const blueprint = $component();
   const frag = blueprint`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li></ul> ${4} </div>`;
-  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> 4 </div>');
+  expectHtml(frag).toBe('<div>1<ul><li>A <span>2</span> B</li><li>3</li></ul>4</div>');
 });
 
 test('in wrapper class', () => {
@@ -139,4 +139,13 @@ test('outer whitespace', () => {
     <div></div>
   `;
   expectHtml(frag).toBe('<div></div>');
+});
+test('indentation', () => {
+  const frag = $component()`
+    <div>
+      <ul>
+      </ul>
+    </div>
+  `;
+  expectHtml(frag).toBe('<div><ul></ul></div>');
 });
