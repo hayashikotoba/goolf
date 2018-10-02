@@ -18,6 +18,7 @@ characterized by persistent DOM structures.
 3. Placeholders always have a parent node, and are not the root.
 4. Slots do not change type
 5. Slots containing array of Frags will not have siblings (as implementatino clear all children of parent)
+6. Components have a single root.
 
 As correlary to (1), the number of slots are fixed, their nodes cacheable.
 

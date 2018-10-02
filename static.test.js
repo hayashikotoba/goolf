@@ -116,6 +116,25 @@ test('slot of n-element array', () => {
   expect(html).toBe('<div>foo<p></p><span></span></div>')
 });
 
+test('updating slot of array', () => {
+  const blueprintChildA = $component(randomId());
+  const fragChildA = blueprintChildA`<a></a>`;
+  const blueprintChildB = $component(randomId());
+  const fragChildB = blueprintChildB`<b></b>`;
+  const blueprintChildC = $component(randomId());
+  const fragChildC = blueprintChildC`<c></c>`;
+
+  const blueprintParent = $component(randomId());
+  const fragParent = blueprintParent`<div>${[fragChildA, fragChildB, fragChildC]}</div>`;
+
+  const blueprintChildD = $component(randomId());
+  const fragChildD = blueprintChildD`<d></d>`;
+  blueprintParent`<div>${[fragChildB, fragChildD]}</div>`;
+
+  const html = fragToHtml(fragParent);
+  expect(html).toBe('<div>foo<b></b><d></d></div>')
+});
+
 // Fix. 4th slot not being replaced.
 test('with slot as last child', () => {
   const blueprint_b = $component(randomId());

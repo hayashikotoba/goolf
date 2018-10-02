@@ -4,6 +4,10 @@
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
   const voidElements = new Set('br','col','hr','img','input','link','meta');
 
+  function randomId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+  }
+
   function parseTag(tag) {
     let i = 0, key;
     const res = { name: '' , voidElement: false, attrs: {} };
@@ -72,6 +76,22 @@
     console.log('updateSlot with value:' + value);
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
+    } else if (Array.isArray(value)) {
+      const {parent} = slot;
+      const {childNodes} = parent;
+      let i = 0, j = 0;
+      while(i < childNodes.length && j < value.length) {
+        const uuid = childNodes[i].uuid;
+        if(!uuid) { i++; continue; }
+        if(uuid == value[j].uuid) { i++; j++; continue; }
+        if(value.some(e => e.uuid == uuid)) {
+          parent.insertBefore(value[j], parent.childNodes[i]);
+          j++; i++;
+        } else {
+          parent.removeChild(parent.childNodes[i]);
+        }
+      }
+      while(j < value.length) { parent.appendChild(value[j]); j++; }
     } else {
       slot.node.nodeValue = value;
     }
@@ -108,6 +128,8 @@
           updateSlot(slots[i], value);
         }
       }
+      frag.uuid = randomId();
+      frag.firstChild.uuid = frag.uuid;
       return frag;
     } else {
       const {slots, values: previousValues, frag} = entry;
