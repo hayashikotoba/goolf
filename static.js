@@ -105,6 +105,7 @@
         for (let i = 0, len = slots.length; i < len; ++i) {
           const value = values[i];
           if(Array.isArray(value)) {
+            slots[i].node.nodeValue = '';
             const frag = document.createDocumentFragment();
             for(let i = 0, len = value.length; i < len; ++i)
               frag.appendChild(value[i]);

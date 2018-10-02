@@ -79,7 +79,7 @@ test('slot of empty array', () => {
   const fragParent = blueprintParent`<div>${[]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>Þ</div>')
+  expect(html).toBe('<div></div>')
 });
 
 test('slot of single element array', () => {
@@ -90,7 +90,7 @@ test('slot of single element array', () => {
   const fragParent = blueprintParent`<div>${[fragChild]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>Þ<p></p></div>')
+  expect(html).toBe('<div><p></p></div>')
 });
 
 test('slot of n-element array', () => {
@@ -103,7 +103,7 @@ test('slot of n-element array', () => {
   const fragParent = blueprintParent`<div>${[fragChildA, fragChildB]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>Þ<p></p><span></span></div>')
+  expect(html).toBe('<div><p></p><span></span></div>')
 });
 
 test('updating slot of array', () => {
@@ -122,7 +122,7 @@ test('updating slot of array', () => {
   blueprintParent`<div>${[fragChildB, fragChildD]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>Þ<b></b><d></d></div>')
+  expect(html).toBe('<div><b></b><d></d></div>')
 });
 
 // Fix. 4th slot not being replaced.
