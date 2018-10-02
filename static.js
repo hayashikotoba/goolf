@@ -26,8 +26,8 @@ parseTag = tag => {
   return res;
 },
 splitContent = (html, start, parentNode, placeholders) => {
-  const content = html.slice(start, html.indexOf('<', start))
-  const tokens = content.split(DELIMITER);
+  const content = html.slice(start, html.indexOf('<', start)),
+    tokens = content.split(DELIMITER);
   if(tokens[0].trim().length > 0)
     parentNode.appendChild(createTextNode(tokens[0]));
   for (let i = 1, len = tokens.length; i < len; ++i) {
@@ -50,10 +50,9 @@ parse = html => {
       level++;
       let name;
       ({name, voidElement} = parseTag(tag));
-      const currNode = $.createElement(name);
+      const currNode = $.createElement(name), parent = arr[level - 1];
       if (!voidElement && nextChar && nextChar !== '<')
         splitContent(html, start, currNode, placeholders);
-      const parent = arr[level - 1];
       if (parent) parent.append(currNode);
       arr[level] = currNode;
     }
