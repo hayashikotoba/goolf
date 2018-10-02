@@ -104,3 +104,27 @@ test('with slot as last child 2', () => {
   const frag = blueprint`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li></ul> ${4} </div>`;
   expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> 4 </div>');
 });
+
+test('in wrapper class', () => {
+  class Component {
+    constructor(height, width) {
+      this.height = height;
+      this.width = width;
+      this.blueprint = $component();
+    }
+    update() {
+      return this.blueprint`<div><p>Height: ${this.height}</p><p>Width: ${this.width}</p></div>`;
+    }
+    double() {
+      this.height *= 2;
+      this.width *= 2;
+    }
+  }
+  const c = new Component(5, 7);
+  const frag = c.update();
+  expectHtml(frag).toBe('<div><p>Height: 5</p><p>Width: 7</p></div>');
+  c.double();
+  expectHtml(frag).toBe('<div><p>Height: 5</p><p>Width: 7</p></div>');
+  c.update();
+  expectHtml(frag).toBe('<div><p>Height: 10</p><p>Width: 14</p></div>');
+});
