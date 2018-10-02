@@ -26,6 +26,18 @@
     return res;
   };
 
+  function splitContent(html, start, parentNode, placeholders) {
+    const content = html.slice(start, html.indexOf('<', start))
+    const tokens = content.split(DELIMITER);
+    parentNode.appendChild(document.createTextNode(tokens[0]));
+    for (let i = 1, len = tokens.length; i < len; ++i) {
+      const element = document.createTextNode(DELIMITER);
+      parentNode.appendChild(element);
+      placeholders.push(element);
+      parentNode.appendChild(document.createTextNode(tokens[i]));
+    }
+  }
+
   function parse(html) {
     let level = -1;
     const arr = [], placeholders = [];
@@ -39,17 +51,8 @@
         let name;
         ({name, voidElement} = parseTag(tag));
         const currNode = document.createElement(name);
-        if (!voidElement && nextChar && nextChar !== '<') {
-          const content = html.slice(start, html.indexOf('<', start));
-          const tokens = content.split(DELIMITER);
-          currNode.appendChild(document.createTextNode(tokens[0]));
-          for (let i = 1, len = tokens.length; i < len; ++i) {
-            const element = document.createTextNode(DELIMITER);
-            currNode.appendChild(element);
-            placeholders.push(element);
-            currNode.appendChild(document.createTextNode(tokens[i]));
-          }
-        }
+        if (!voidElement && nextChar && nextChar !== '<')
+          splitContent(html, start, currNode, placeholders);
         const parent = arr[level - 1];
         if (parent) parent.append(currNode);
         arr[level] = currNode;
@@ -57,17 +60,8 @@
       if (!isOpen || voidElement) {
         level--;
         // trailing content after last child.
-        if (nextChar !== '<' && nextChar) {
-          const content = html.slice(start, html.indexOf('<', start));
-          const tokens = content.split(DELIMITER);
-          arr[level].appendChild(document.createTextNode(tokens[0]));
-          for (let i = 1, len = tokens.length; i < len; ++i) {
-            const element = document.createTextNode(DELIMITER);
-            arr[level].appendChild(element);
-            placeholders.push(element);
-            arr[level].appendChild(document.createTextNode(tokens[i]));
-          }
-        }
+        if (nextChar !== '<' && nextChar)
+          splitContent(html, start, arr[level], placeholders);
       }
     });
 
