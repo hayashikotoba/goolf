@@ -77,9 +77,9 @@ updateSlot = (slot, value) => {
     const {childNodes} = parent;
     for(let i=j=0;i < childNodes.length && j < value.length;) {
       const uuid = childNodes[i].uuid;
-      if(!uuid) { i++; continue; }
-      if(uuid == value[j].uuid) { i++; j++; continue; }
-      if(value.some(e => e.uuid == uuid)) {
+      if(!uuid) { i++; }
+      else if (uuid == value[j].uuid) { i++; j++; }
+      else if(value.some(e => e.uuid == uuid)) {
         parent.insertBefore(value[j++], parent.childNodes[i++]);
       } else {
         parent.removeChild(parent.childNodes[i]);
