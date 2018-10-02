@@ -105,7 +105,7 @@
             frag.appendChild(value[i]);
           slots[i].parent.appendChild(frag);
         } else {
-          updateSlot(slots[i], value, true);
+          updateSlot(slots[i], value);
         }
       }
       return frag;
