@@ -5,6 +5,9 @@ TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g,
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
 voidElements = new Set('br','col','hr','img','input','link','meta'),
 DELIMITER = 'Þ',
+$ = document,
+createDocumentFragment = $.createDocumentFragment.bind($),
+createTextNode = $.createTextNode.bind($),
 randomId = () => '_' + Math.random().toString(36).substr(2, 9),
 parseTag = tag => {
   let i = 0, key;
@@ -26,13 +29,13 @@ splitContent = (html, start, parentNode, placeholders) => {
   const content = html.slice(start, html.indexOf('<', start))
   const tokens = content.split(DELIMITER);
   if(tokens[0].trim().length > 0)
-    parentNode.appendChild(document.createTextNode(tokens[0]));
+    parentNode.appendChild(createTextNode(tokens[0]));
   for (let i = 1, len = tokens.length; i < len; ++i) {
-    const element = document.createTextNode(DELIMITER);
+    const element = createTextNode(DELIMITER);
     parentNode.appendChild(element);
     placeholders.push(element);
     if(tokens[i].trim().length > 0)
-      parentNode.appendChild(document.createTextNode(tokens[i]));
+      parentNode.appendChild(createTextNode(tokens[i]));
   }
 },
 parse = html => {
@@ -47,7 +50,7 @@ parse = html => {
       level++;
       let name;
       ({name, voidElement} = parseTag(tag));
-      const currNode = document.createElement(name);
+      const currNode = $.createElement(name);
       if (!voidElement && nextChar && nextChar !== '<')
         splitContent(html, start, currNode, placeholders);
       const parent = arr[level - 1];
@@ -62,7 +65,7 @@ parse = html => {
     }
   });
 
-  const frag = document.createDocumentFragment();
+  const frag = createDocumentFragment();
   frag.appendChild(arr[0]);
   return {
     frag,
@@ -99,7 +102,7 @@ component = () => {
         const value = values[i];
         if(Array.isArray(value)) {
           slots[i].node.nodeValue = '';
-          const frag = document.createDocumentFragment();
+          const frag = createDocumentFragment();
           for(let j = 0, len = value.length; j < len;)
             frag.appendChild(value[j++]);
           slots[i].parent.appendChild(frag);
