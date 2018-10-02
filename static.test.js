@@ -38,17 +38,6 @@ test('with childen', () => {
   expect(html).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul></div>');
 });
 
-test('blueprint refs the same fragment', () => {
-  const blueprint = $component(randomId());
-  const frag1 = blueprint`<div>${1}</div>`;
-  const frag2 = blueprint`<div>${'a'}</div>`;
-  const html1 = fragToHtml(frag1);
-  const html2 = fragToHtml(frag2);
-  expect(html1).toBe("<div>a</div>");
-  expect(html2).toBe("<div>a</div>");
-  expect(frag1).toBe(frag2);
-});
-
 test('subcomponent', () => {
   const blueprintA = $component(randomId());
   const blueprintB = $component(randomId());
@@ -63,8 +52,9 @@ test('subcomponent', () => {
 test('update subcomponent before adding to parent', () => {
   const blueprintA = $component(randomId());
   const blueprintB = $component(randomId());
-  blueprintA`<div>${1}</div>`;
-  const frag1 = blueprintA`<div>${2}</div>`;
+  const frag1 = blueprintA`<div>${1}</div>`;
+  blueprintA`<div>${2}</div>`;
+
   const frag2 = blueprintB`<div>${frag1}</div>`;
   const html1 = fragToHtml(frag1);
   const html2 = fragToHtml(frag2);

@@ -113,7 +113,6 @@
     if (entry === undefined) {
       const {frag, slots} = parse(strings.join(DELIMITER));
       cache.set(id, {
-        frag,
         slots,
         values
       });
@@ -132,7 +131,7 @@
       frag.firstChild.uuid = frag.uuid;
       return frag;
     } else {
-      const {slots, values: previousValues, frag} = entry;
+      const {slots, values: previousValues} = entry;
       // Updated DIFFed nodes.
       for (let i = 0, len = previousValues.length; i < len; ++i) {
         const value = values[i];
@@ -141,7 +140,6 @@
           previousValues[i] = value;
         }
       }
-      return frag;
     }
   };
   const StaticJs = {
