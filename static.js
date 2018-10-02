@@ -6,7 +6,7 @@
   DELIMITER = 'Þ',
   randomId = () => '_' + Math.random().toString(36).substr(2, 9);
 
-  function parseTag(tag) {
+  const parseTag = tag => {
     let i = 0, key;
     const res = { name: '' , voidElement: false, attrs: {} };
     tag.replace(ATTR_REGEX, function (match) {
@@ -23,7 +23,7 @@
     return res;
   };
 
-  function splitContent(html, start, parentNode, placeholders) {
+  const splitContent = (html, start, parentNode, placeholders) => {
     const content = html.slice(start, html.indexOf('<', start))
     const tokens = content.split(DELIMITER);
     if(tokens[0].trim().length > 0)
@@ -35,9 +35,9 @@
       if(tokens[i].trim().length > 0)
         parentNode.appendChild(document.createTextNode(tokens[i]));
     }
-  }
+  };
 
-  function parse(html) {
+  const parse = html => {
     let level = -1;
     const arr = [], placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
@@ -70,9 +70,9 @@
       frag,
       slots: placeholders.map(node => ({node, parent: node.parentNode}))
     };
-  }
+  };
 
-  function updateSlot(slot, value) {
+  const updateSlot = (slot, value) => {
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
@@ -92,9 +92,9 @@
     } else {
       slot.node.nodeValue = value;
     }
-  }
+  };
 
-  const component = function() {
+  const component = () => {
     let _slots, _values;
     return (strings, ...values) => {
       if (!_slots) {
