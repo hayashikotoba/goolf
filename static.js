@@ -97,55 +97,43 @@
     }
   }
 
-  const template = (container, ...rest) => {
-    const appComponent = blueprint.bind(null, "#foo");
-    container.appendChild(appComponent(...rest));
-  };
-
-  const component = id => {
-    return blueprint.bind(null, id);
-  }
-
-  const cache = new Map();
-  const blueprint = (id, strings, ...values) => {
-    const entry = cache.get(id);
-    // Instantiate Fragment, and get list of placeholder nodes.
-    if (entry === undefined) {
-      const {frag, slots} = parse(strings.join(DELIMITER));
-      cache.set(id, {
-        slots,
-        values
-      });
-      for (let i = 0, len = slots.length; i < len; ++i) {
-        const value = values[i];
-        if(Array.isArray(value)) {
-          const frag = document.createDocumentFragment();
-          for(let i = 0, len = value.length; i < len; ++i)
-            frag.appendChild(value[i]);
-          slots[i].parent.appendChild(frag);
-        } else {
-          updateSlot(slots[i], value);
+  const component = function() {
+    let _slots, _values;
+    return (strings, ...values) => {
+      if (!_slots) {
+        const {frag, slots}= parse(strings.join(DELIMITER));
+        for (let i = 0, len = slots.length; i < len; ++i) {
+          const value = values[i];
+          if(Array.isArray(value)) {
+            const frag = document.createDocumentFragment();
+            for(let i = 0, len = value.length; i < len; ++i)
+              frag.appendChild(value[i]);
+            slots[i].parent.appendChild(frag);
+          } else {
+            updateSlot(slots[i], value);
+          }
         }
-      }
-      frag.uuid = randomId();
-      frag.firstChild.uuid = frag.uuid;
-      return frag;
-    } else {
-      const {slots, values: previousValues} = entry;
-      // Updated DIFFed nodes.
-      for (let i = 0, len = previousValues.length; i < len; ++i) {
-        const value = values[i];
-        if (previousValues[i] != value) {
-          updateSlot(slots[i], value);
-          previousValues[i] = value;
+        frag.uuid = randomId();
+        frag.firstChild.uuid = frag.uuid;
+        _slots = slots;
+        _values = values;
+        return frag;
+      } else {
+        const previousValues = _values;
+        const slots = _slots;
+        // Updated DIFFed nodes.
+        for (let i = 0, len = previousValues.length; i < len; ++i) {
+          const value = values[i];
+          if (previousValues[i] != value) {
+            updateSlot(slots[i], value);
+            previousValues[i] = value;
+          }
         }
       }
     }
   };
   const StaticJs = {
     $component: component,
-    $blueprint:  blueprint,
-    $app:  container => template.bind(null, container),
   };
   window.StaticJs = StaticJs;
   if(module) {
