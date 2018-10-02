@@ -15,6 +15,11 @@ test('zero slots', () => {
   expectHtml(frag).toBe('<div></div>');
 });
 
+test('zero slots', () => {
+  const frag = $component()`<div></div>`;
+  expectHtml(frag).toBe('<div></div>');
+});
+
 test('one slots', () => {
   const frag = $component()`<div>${5}</div>`;
   expectHtml(frag).toBe('<div>5</div>')
@@ -127,4 +132,11 @@ test('in wrapper class', () => {
   expectHtml(frag).toBe('<div><p>Height: 5</p><p>Width: 7</p></div>');
   c.update();
   expectHtml(frag).toBe('<div><p>Height: 10</p><p>Width: 14</p></div>');
+});
+
+test('outer whitespace', () => {
+  const frag = $component()`
+    <div></div>
+  `;
+  expectHtml(frag).toBe('<div></div>');
 });

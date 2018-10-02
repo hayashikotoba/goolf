@@ -41,6 +41,7 @@
   function parse(html) {
     let level = -1;
     const arr = [], placeholders = [];
+    html = html.trim();
     html.replace(TAG_RE, function (tag, index) {
       const isOpen = tag.charAt(1) !== '/',
           start = index + tag.length,
@@ -101,7 +102,7 @@
     let _slots, _values;
     return (strings, ...values) => {
       if (!_slots) {
-        const {frag, slots}= parse(strings.join(DELIMITER));
+        const {frag, slots} = parse(strings.join(DELIMITER));
         for (let i = 0, len = slots.length; i < len; ++i) {
           const value = values[i];
           if(Array.isArray(value)) {
