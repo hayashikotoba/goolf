@@ -4,9 +4,8 @@
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
   voidElements = new Set('br','col','hr','img','input','link','meta'),
   DELIMITER = 'Þ',
-  randomId = () => '_' + Math.random().toString(36).substr(2, 9);
-
-  const parseTag = tag => {
+  randomId = () => '_' + Math.random().toString(36).substr(2, 9),
+  parseTag = tag => {
     let i = 0, key;
     const res = { name: '' , voidElement: false, attrs: {} };
     tag.replace(ATTR_REGEX, function (match) {
@@ -21,9 +20,8 @@
       ++i;
     });
     return res;
-  };
-
-  const splitContent = (html, start, parentNode, placeholders) => {
+  },
+  splitContent = (html, start, parentNode, placeholders) => {
     const content = html.slice(start, html.indexOf('<', start))
     const tokens = content.split(DELIMITER);
     if(tokens[0].trim().length > 0)
@@ -35,9 +33,8 @@
       if(tokens[i].trim().length > 0)
         parentNode.appendChild(document.createTextNode(tokens[i]));
     }
-  };
-
-  const parse = html => {
+  },
+  parse = html => {
     let level = -1;
     const arr = [], placeholders = [];
     html.replace(TAG_RE, function (tag, index) {
@@ -70,9 +67,8 @@
       frag,
       slots: placeholders.map(node => ({node, parent: node.parentNode}))
     };
-  };
-
-  const updateSlot = (slot, value) => {
+  },
+  updateSlot = (slot, value) => {
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
@@ -92,9 +88,8 @@
     } else {
       slot.node.nodeValue = value;
     }
-  };
-
-  const component = () => {
+  },
+  component = () => {
     let _slots, _values;
     return (strings, ...values) => {
       if (!_slots) {
@@ -127,8 +122,8 @@
         }
       }
     }
-  };
-  const StaticJs = {
+  },
+  StaticJs = {
     $component: component,
   };
   window.StaticJs = StaticJs;
