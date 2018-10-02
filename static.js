@@ -41,7 +41,6 @@
   function parse(html) {
     let level = -1;
     const arr = [], placeholders = [];
-    html = html.trim();
     html.replace(TAG_RE, function (tag, index) {
       const isOpen = tag.charAt(1) !== '/',
           start = index + tag.length,
@@ -80,19 +79,17 @@
     } else if (Array.isArray(value)) {
       const {parent} = slot;
       const {childNodes} = parent;
-      let i = 0, j = 0;
-      while(i < childNodes.length && j < value.length) {
+      for(i=j=0;i < childNodes.length && j < value.length;) {
         const uuid = childNodes[i].uuid;
         if(!uuid) { i++; continue; }
         if(uuid == value[j].uuid) { i++; j++; continue; }
         if(value.some(e => e.uuid == uuid)) {
-          parent.insertBefore(value[j], parent.childNodes[i]);
-          j++; i++;
+          parent.insertBefore(value[j++], parent.childNodes[i++]);
         } else {
           parent.removeChild(parent.childNodes[i]);
         }
       }
-      while(j < value.length) { parent.appendChild(value[j]); j++; }
+      while(j < value.length) parent.appendChild(value[j++]);
     } else {
       slot.node.nodeValue = value;
     }
@@ -102,14 +99,14 @@
     let _slots, _values;
     return (strings, ...values) => {
       if (!_slots) {
-        const {frag, slots} = parse(strings.join(DELIMITER));
+        const {frag, slots} = parse(strings.join(DELIMITER).trim());
         for (let i = 0, len = slots.length; i < len; ++i) {
           const value = values[i];
           if(Array.isArray(value)) {
             slots[i].node.nodeValue = '';
             const frag = document.createDocumentFragment();
-            for(let i = 0, len = value.length; i < len; ++i)
-              frag.appendChild(value[i]);
+            for(let i = 0, len = value.length; i < len;)
+              frag.appendChild(value[i++]);
             slots[i].parent.appendChild(frag);
           } else {
             updateSlot(slots[i], value);
