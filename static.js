@@ -75,7 +75,7 @@ updateSlot = (slot, value) => {
   } else if (Array.isArray(value)) {
     const {parent} = slot;
     const {childNodes} = parent;
-    for(i=j=0;i < childNodes.length && j < value.length;) {
+    for(let i=j=0;i < childNodes.length && j < value.length;) {
       const uuid = childNodes[i].uuid;
       if(!uuid) { i++; continue; }
       if(uuid == value[j].uuid) { i++; j++; continue; }
