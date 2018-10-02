@@ -3,6 +3,7 @@
   const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
   const voidElements = new Set('br','col','hr','img','input','link','meta');
+  const DELIMITER = 'Þ';
 
   function randomId() {
     return '_' + Math.random().toString(36).substr(2, 9);
@@ -40,10 +41,10 @@
         const currNode = document.createElement(name);
         if (!voidElement && nextChar && nextChar !== '<') {
           const content = html.slice(start, html.indexOf('<', start));
-          const tokens = content.split('foo');
+          const tokens = content.split(DELIMITER);
           currNode.appendChild(document.createTextNode(tokens[0]));
           for (let i = 1, len = tokens.length; i < len; ++i) {
-            const element = document.createTextNode('foo');
+            const element = document.createTextNode(DELIMITER);
             currNode.appendChild(element);
             placeholders.push(element);
             currNode.appendChild(document.createTextNode(tokens[i]));
@@ -73,7 +74,6 @@
   }
 
   function updateSlot(slot, value) {
-    console.log('updateSlot with value:' + value);
     if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
       slot.node.parentNode.replaceChild(value, slot.node);
     } else if (Array.isArray(value)) {
@@ -111,7 +111,7 @@
     const entry = cache.get(id);
     // Instantiate Fragment, and get list of placeholder nodes.
     if (entry === undefined) {
-      const {frag, slots} = parse(strings.join('foo'));
+      const {frag, slots} = parse(strings.join(DELIMITER));
       cache.set(id, {
         frag,
         slots,

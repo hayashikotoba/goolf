@@ -89,7 +89,7 @@ test('slot of empty array', () => {
   const fragParent = blueprintParent`<div>${[]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>foo</div>')
+  expect(html).toBe('<div>Þ</div>')
 });
 
 test('slot of single element array', () => {
@@ -100,7 +100,7 @@ test('slot of single element array', () => {
   const fragParent = blueprintParent`<div>${[fragChild]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>foo<p></p></div>')
+  expect(html).toBe('<div>Þ<p></p></div>')
 });
 
 test('slot of n-element array', () => {
@@ -113,7 +113,7 @@ test('slot of n-element array', () => {
   const fragParent = blueprintParent`<div>${[fragChildA, fragChildB]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>foo<p></p><span></span></div>')
+  expect(html).toBe('<div>Þ<p></p><span></span></div>')
 });
 
 test('updating slot of array', () => {
@@ -132,7 +132,7 @@ test('updating slot of array', () => {
   blueprintParent`<div>${[fragChildB, fragChildD]}</div>`;
 
   const html = fragToHtml(fragParent);
-  expect(html).toBe('<div>foo<b></b><d></d></div>')
+  expect(html).toBe('<div>Þ<b></b><d></d></div>')
 });
 
 // Fix. 4th slot not being replaced.
@@ -140,7 +140,7 @@ test('with slot as last child', () => {
   const blueprint_b = $component(randomId());
   const frag = blueprint_b`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li>  ${4}  </ul></div>`;
   const html = fragToHtml(frag);
-  expect(html).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li>  foo  </ul></div>');
+  expect(html).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li>  Þ  </ul></div>');
 });
 
 // TODO: 4th slot being replaced.
@@ -148,5 +148,5 @@ test('with slot as last child 2', () => {
   const blueprint_b = $component(randomId());
   const frag = blueprint_b`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li></ul> ${4} </div>`;
   const html = fragToHtml(frag);
-  expect(html).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> foo </div>');
+  expect(html).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> Þ </div>');
 });
