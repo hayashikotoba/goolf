@@ -13,7 +13,7 @@ parseTag = tag => {
     if (i % 2) {
       key = match;
     } else if (i === 0) {
-      if (voidElements.has(match) || tag.charAt(tag.length - 2) === '/') res.voidElement = true;
+      if (voidElements.has(match) || tag[tag.length - 2] === '/') res.voidElement = true;
       res.name = match;
     } else {
       res.attrs[key] = match.replace(/['"]/g, '');
@@ -39,9 +39,9 @@ parse = html => {
   let level = -1;
   const arr = [], placeholders = [];
   html.replace(TAG_RE, function (tag, index) {
-    const isOpen = tag.charAt(1) !== '/',
+    const isOpen = tag[1] !== '/',
         start = index + tag.length,
-        nextChar = html.charAt(start);
+        nextChar = html[start];
     let voidElement;
     if (isOpen) {
       level++;
