@@ -105,8 +105,8 @@
           if(Array.isArray(value)) {
             slots[i].node.nodeValue = '';
             const frag = document.createDocumentFragment();
-            for(let i = 0, len = value.length; i < len;)
-              frag.appendChild(value[i++]);
+            for(let j = 0, len = value.length; j < len;)
+              frag.appendChild(value[j++]);
             slots[i].parent.appendChild(frag);
           } else {
             updateSlot(slots[i], value);
