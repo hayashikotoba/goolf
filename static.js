@@ -1,4 +1,4 @@
-(function () {
+(() => {
 
 const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g,
 TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g,
@@ -12,7 +12,7 @@ randomId = () => '_' + Math.random().toString(36).substr(2, 9),
 parseTag = tag => {
   let i = 0, key;
   const res = { name: '' , voidElement: false, attrs: {} };
-  tag.replace(ATTR_REGEX, function (match) {
+  tag.replace(ATTR_REGEX, match => {
     if (i % 2) {
       key = match;
     } else if (i === 0) {
