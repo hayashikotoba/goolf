@@ -1,11 +1,10 @@
 (function () {
-  const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
-  const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
+  const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g,
+  TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g,
   // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-  const voidElements = new Set('br','col','hr','img','input','link','meta');
-  const DELIMITER = 'Þ';
-
-  const randomId = () => '_' + Math.random().toString(36).substr(2, 9);
+  voidElements = new Set('br','col','hr','img','input','link','meta'),
+  DELIMITER = 'Þ',
+  randomId = () => '_' + Math.random().toString(36).substr(2, 9);
 
   function parseTag(tag) {
     let i = 0, key;
