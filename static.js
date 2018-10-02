@@ -5,9 +5,7 @@
   const voidElements = new Set('br','col','hr','img','input','link','meta');
   const DELIMITER = 'Þ';
 
-  function randomId() {
-    return '_' + Math.random().toString(36).substr(2, 9);
-  }
+  const randomId = () => '_' + Math.random().toString(36).substr(2, 9);
 
   function parseTag(tag) {
     let i = 0, key;
