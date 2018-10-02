@@ -93,16 +93,14 @@ test('updating slot of array', () => {
   expectHtml(frag).toBe('<div><b></b><d></d></div>')
 });
 
-// Fix. 4th slot not being replaced.
 test('with slot as last child', () => {
   const blueprint = $component();
   const frag = blueprint`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li>  ${4}  </ul></div>`;
-  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li>  Þ  </ul></div>');
+  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li>  4  </ul></div>');
 });
 
-// TODO: 4th slot being replaced.
 test('with slot as last child 2', () => {
   const blueprint = $component();
   const frag = blueprint`<div> ${1} <ul><li>A <span>${2}</span> B</li> <li>${3}</li></ul> ${4} </div>`;
-  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> Þ </div>');
+  expectHtml(frag).toBe('<div> 1 <ul><li>A <span>2</span> B</li> <li>3</li></ul> 4 </div>');
 });
