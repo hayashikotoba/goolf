@@ -73,7 +73,8 @@ parse = html => {
   };
 },
 updateSlot = (slot, value) => {
-  if(value && value.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+  // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
+  if(value && value.nodeType == 11) {
     slot.node.parentNode.replaceChild(value, slot.node);
   } else if (Array.isArray(value)) {
     const {parent} = slot;
