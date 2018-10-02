@@ -119,14 +119,12 @@
         _values = values;
         return frag;
       } else {
-        const previousValues = _values;
-        const slots = _slots;
         // Updated DIFFed nodes.
-        for (let i = 0, len = previousValues.length; i < len; ++i) {
+        for (let i = 0, len = values.length; i < len; ++i) {
           const value = values[i];
-          if (previousValues[i] != value) {
-            updateSlot(slots[i], value);
-            previousValues[i] = value;
+          if (_values[i] != value) {
+            updateSlot(_slots[i], value);
+            _values[i] = value;
           }
         }
       }
