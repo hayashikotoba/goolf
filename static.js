@@ -3,7 +3,7 @@
 const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g,
 TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g,
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-voidElements = new Set('br','col','hr','img','input','link','meta'),
+voidElements = new Set(['br','col','hr','img','input','link','meta']),
 DELIMITER = 'Þ',
 $ = document,
 createDocumentFragment = $.createDocumentFragment.bind($),
