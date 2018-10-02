@@ -41,7 +41,7 @@ splitContent = (html, start, parentNode, placeholders) => {
 parse = html => {
   let level = -1;
   const arr = [], placeholders = [];
-  html.replace(TAG_RE, function (tag, index) {
+  html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
         nextChar = html[start];
