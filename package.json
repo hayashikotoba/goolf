@@ -6,9 +6,19 @@
   "dependencies": {
     "jest": "^23.6.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "babel-preset-minify": "^0.5.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-beautify": "^2.0.1",
+    "gulp-notify": "^3.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-size": "^3.0.0"
+  },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "minify": "gulp"
   },
   "repository": {
     "type": "git",
