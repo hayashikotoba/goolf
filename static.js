@@ -1,15 +1,19 @@
 (() => {
 
-const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g,
-TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g,
+const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
+const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
+
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-voidElements = new Set(['br','col','hr','img','input','link','meta']),
-DELIMITER = 'Þ',
-$ = document,
-createDocumentFragment = $.createDocumentFragment.bind($),
-createTextNode = $.createTextNode.bind($),
-randomId = () => '_' + Math.random().toString(36).substr(2, 9),
-parseTag = tag => {
+const voidElements = new Set(['br','col','hr','img','input','link','meta']);
+const DELIMITER = 'Þ';
+
+const $ = document;
+const createDocumentFragment = $.createDocumentFragment.bind($);
+const createTextNode = $.createTextNode.bind($);
+
+const randomId = () => '_' + Math.random().toString(36).substr(2, 9);
+
+const parseTag = tag => {
   let i = 0, key;
   const res = { name: '' , voidElement: false, attrs: {} };
   tag.replace(ATTR_REGEX, match => {
@@ -24,8 +28,9 @@ parseTag = tag => {
     ++i;
   });
   return res;
-},
-splitContent = (html, start, parentNode, placeholders) => {
+};
+
+const splitContent = (html, start, parentNode, placeholders) => {
   const content = html.slice(start, html.indexOf('<', start)),
     tokens = content.split(DELIMITER);
   if(tokens[0].trim().length > 0)
@@ -37,8 +42,9 @@ splitContent = (html, start, parentNode, placeholders) => {
     if(tokens[i].trim().length > 0)
       parentNode.appendChild(createTextNode(tokens[i]));
   }
-},
-parse = html => {
+};
+
+const parse = html => {
   let level = -1;
   const arr = [], placeholders = [];
   html.replace(TAG_RE, (tag, index) => {
@@ -70,8 +76,9 @@ parse = html => {
     frag,
     slots: placeholders.map(node => ({node, parent: node.parentNode}))
   };
-},
-updateSlot = (slot, value) => {
+};
+
+const updateSlot = (slot, value) => {
   // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
   if(value && value.nodeType == 11) {
     slot.node.parentNode.replaceChild(value, slot.node);
@@ -89,8 +96,9 @@ updateSlot = (slot, value) => {
   } else {
     slot.node.nodeValue = value;
   }
-},
-component = () => {
+};
+
+const component = () => {
   let _slots, _values;
   return (strings, ...values) => {
     if (!_slots) {
@@ -121,8 +129,9 @@ component = () => {
       }
     }
   }
-},
-StaticJs = {
+};
+
+const StaticJs = {
   $component: component,
 };
 window.StaticJs = StaticJs;
