@@ -7,10 +7,11 @@ const size = require('gulp-size');
 const SOURCE_FILE = 'static.js';
 const OUTPUT_DIRECTORY = 'dist';
 const BABEL_CONFIG = {
-  presets: ['babel-preset-minify']
+  presets: ['babel-preset-minify'],
+  comments: false,
 };
 const BEAUTIFY_CONFIG = {
-  indent_size: 2
+  indent_size: 2,
 };
 
 gulp.task('default', function() {
