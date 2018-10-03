@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Static.js is a minimalist JavaScript nano ViewModel framework for building stateful web applications characterized by persistent DOM structures.",
   "main": "static.js",
-  "dependencies": {
-    "jest": "^23.6.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "gulp": "^4.0.0",
@@ -14,7 +12,8 @@
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-size": "^3.0.0",
-    "gulp-terser": "^1.1.5"
+    "gulp-terser": "^1.1.5",
+    "jest": "^23.6.0"
   },
   "scripts": {
     "test": "jest",
