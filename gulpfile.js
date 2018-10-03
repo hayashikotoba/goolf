@@ -28,6 +28,11 @@ gulp.task('default', function() {
         passes: 3, // number of times to re-compress.
         unsafe: true,
       },
+      mangle: {
+        properties: {
+          regex: /^(_terser_)/
+        }
+      },
     }))
     .pipe(rename({ suffix: ".min" }))
     .pipe(size({showFiles: true}))

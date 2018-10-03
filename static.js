@@ -69,17 +69,17 @@ const parse = html => {
   const frag = document.createDocumentFragment();
   frag.appendChild(arr[0]);
   return {
-    frag,
-    slots: placeholders.map(node => ({node, parent: node.parentNode}))
+    _terser_frag: frag,
+    _terser_slots: placeholders.map(node => ({_terser_node: node, _terser_parent: node.parentNode}))
   };
 };
 
 const updateSlot = (slot, value) => {
   // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
   if(value && value.nodeType == 11) {
-    slot.node.parentNode.replaceChild(value, slot.node);
+    slot._terser_node.parentNode.replaceChild(value, slot._terser_node);
   } else if (Array.isArray(value)) {
-    const {parent} = slot;
+    const {_terser_parent: parent} = slot;
     const {childNodes} = parent;
     for(let i=j=0;i < childNodes.length && j < value.length;) {
       const uuid = childNodes[i].uuid;
@@ -90,7 +90,7 @@ const updateSlot = (slot, value) => {
     }
     while(j < value.length) parent.appendChild(value[j++]);
   } else {
-    slot.node.nodeValue = value;
+    slot._terser_node.nodeValue = value;
   }
 };
 
@@ -98,15 +98,15 @@ const component = () => {
   let _slots, _values;
   return (strings, ...values) => {
     if (!_slots) {
-      const {frag, slots} = parse(strings.join(DELIMITER).trim());
+      const {_terser_frag: frag, _terser_slots: slots} = parse(strings.join(DELIMITER).trim());
       for (let i = 0, len = slots.length; i < len; ++i) {
         const value = values[i];
         if(Array.isArray(value)) {
-          slots[i].node.nodeValue = '';
+          slots[i]._terser_node.nodeValue = '';
           const frag = document.createDocumentFragment();
           for(let j = 0, len = value.length; j < len;)
             frag.appendChild(value[j++]);
-          slots[i].parent.appendChild(frag);
+          slots[i]._terser_parent.appendChild(frag);
         } else {
           updateSlot(slots[i], value);
         }
