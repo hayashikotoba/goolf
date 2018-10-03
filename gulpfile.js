@@ -19,7 +19,16 @@ gulp.task('default', function() {
   return gulp
     .src(SOURCE_FILE)
     .pipe(babel(BABEL_CONFIG))
-    .pipe(terser())
+    .pipe(terser({
+      ecma: 5,
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        inline: 1, // inline function body.
+        passes: 3, // number of times to re-compress.
+        unsafe: true,
+      },
+    }))
     .pipe(rename({ suffix: ".min" }))
     .pipe(size({showFiles: true}))
     .pipe(size({showFiles: true, gzip: true}))

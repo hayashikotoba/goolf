@@ -1,4 +1,4 @@
-const {$component} = require('./static');
+const {$component} = require('./dist/static.min');
 
 function fragToHtml(frag) {
   const div = document.createElement('div');
