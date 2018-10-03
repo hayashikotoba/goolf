@@ -7,10 +7,6 @@ const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 const voidElements = new Set(['br','col','hr','img','input','link','meta']);
 const DELIMITER = 'Þ';
 
-const $ = document;
-const createDocumentFragment = $.createDocumentFragment.bind($);
-const createTextNode = $.createTextNode.bind($);
-
 const randomId = () => '_' + Math.random().toString(36).substr(2, 9);
 
 const parseTag = tag => {
@@ -34,13 +30,13 @@ const splitContent = (html, start, parentNode, placeholders) => {
   const content = html.slice(start, html.indexOf('<', start)),
     tokens = content.split(DELIMITER);
   if(tokens[0].trim().length > 0)
-    parentNode.appendChild(createTextNode(tokens[0]));
+    parentNode.appendChild(document.createTextNode(tokens[0]));
   for (let i = 1, len = tokens.length; i < len; ++i) {
-    const element = createTextNode(DELIMITER);
+    const element = document.createTextNode(DELIMITER);
     parentNode.appendChild(element);
     placeholders.push(element);
     if(tokens[i].trim().length > 0)
-      parentNode.appendChild(createTextNode(tokens[i]));
+      parentNode.appendChild(document.createTextNode(tokens[i]));
   }
 };
 
@@ -56,7 +52,7 @@ const parse = html => {
       level++;
       let name;
       ({name, voidElement} = parseTag(tag));
-      const currNode = $.createElement(name), parent = arr[level - 1];
+      const currNode = document.createElement(name), parent = arr[level - 1];
       if (!voidElement && nextChar && nextChar !== '<')
         splitContent(html, start, currNode, placeholders);
       if (parent) parent.append(currNode);
@@ -70,7 +66,7 @@ const parse = html => {
     }
   });
 
-  const frag = createDocumentFragment();
+  const frag = document.createDocumentFragment();
   frag.appendChild(arr[0]);
   return {
     frag,
@@ -107,7 +103,7 @@ const component = () => {
         const value = values[i];
         if(Array.isArray(value)) {
           slots[i].node.nodeValue = '';
-          const frag = createDocumentFragment();
+          const frag = document.createDocumentFragment();
           for(let j = 0, len = value.length; j < len;)
             frag.appendChild(value[j++]);
           slots[i].parent.appendChild(frag);
