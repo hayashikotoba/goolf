@@ -38,7 +38,7 @@ const splitContent = (html, start, parentNode, placeholders,
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = document.createTextNode(DELIMITER);
     parentNode.appendChild(element);
-    placeholders.push(element);
+    placeholders.push({_terser_node: element, _terser_parent: element.parentNode});
     addTextNode(i);
   }
 };
@@ -70,7 +70,7 @@ const parse = (html,
   frag.appendChild(arr[0]);
   return {
     _terser_frag: frag,
-    _terser_slots: placeholders.map(node => ({_terser_node: node, _terser_parent: node.parentNode}))
+    _terser_slots: placeholders
   };
 };
 
