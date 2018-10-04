@@ -68,9 +68,7 @@ const parse = (html, slots,
 
   const frag = document.createDocumentFragment();
   frag.appendChild(arr[0]);
-  return {
-    _terser_frag: frag,
-  };
+  return frag;
 };
 
 const updateSlot = (slot, value) => {
@@ -99,7 +97,7 @@ StaticJS = () => {
   return (strings, ...values) => {
     if (!slots) {
       slots = [];
-      const {_terser_frag: frag} = parse(strings.join(DELIMITER).trim(), slots);
+      const componentFrag = parse(strings.join(DELIMITER).trim(), slots);
       for (let i = 0, len = slots.length; i < len; ++i) {
         const value = values[i];
         if(Array.isArray(value)) {
@@ -112,9 +110,9 @@ StaticJS = () => {
           updateSlot(slots[i], value);
         }
       }
-      frag.firstChild._terser_uuid = frag._terser_uuid = randomId();
+      componentFrag.firstChild._terser_uuid = componentFrag._terser_uuid = randomId();
       _values = values;
-      return frag;
+      return componentFrag;
     } else {
       // Updated DIFFed nodes.
       for (let i = 0, len = values.length; i < len; ++i) {
