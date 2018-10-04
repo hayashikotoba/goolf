@@ -95,10 +95,10 @@ const updateSlot = (slot, value) => {
 };
 
 StaticJS = () => {
-  let _slots, _values ;
+  let slots, _values ;
   return (strings, ...values) => {
-    if (!_slots) {
-      const slots = [];
+    if (!slots) {
+      slots = [];
       const {_terser_frag: frag} = parse(strings.join(DELIMITER).trim(), slots);
       for (let i = 0, len = slots.length; i < len; ++i) {
         const value = values[i];
@@ -113,7 +113,6 @@ StaticJS = () => {
         }
       }
       frag.firstChild._terser_uuid = frag._terser_uuid = randomId();
-      _slots = slots;
       _values = values;
       return frag;
     } else {
@@ -121,7 +120,7 @@ StaticJS = () => {
       for (let i = 0, len = values.length; i < len; ++i) {
         const value = values[i];
         if (_values[i] != value)
-          updateSlot(_slots[i], value),_values[i] = value;
+          updateSlot(slots[i], value),_values[i] = value;
       }
     }
   }
