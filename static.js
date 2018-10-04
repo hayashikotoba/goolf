@@ -98,9 +98,8 @@ const updateSlot = (slot, value) => {
   }
 };
 
-StaticJS = (
-    /* Golf variable declaration. */
-    _slots, _values) => {
+StaticJS = () => {
+  let _slots, _values ;
   return (strings, ...values) => {
     if (!_slots) {
       const {_terser_frag: frag, _terser_slots: slots} = parse(strings.join(DELIMITER).trim());
