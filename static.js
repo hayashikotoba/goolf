@@ -10,11 +10,10 @@ const DELIMITER = 'Þ';
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
 const randomId = () => Date.now() + Math.random();
 
-const parseTag = (tag,
+const parseTag = (tag, res,
     /* Golf variable declaration. */
     i = 0,
-    key,
-    res = { _terser_name: '' , _terser_voidElement: false, _terser_attrs: {} }) => {
+    key) => {
   tag.replace(ATTR_REGEX, match => {
     if (i % 2) {
       key = match;
@@ -26,7 +25,6 @@ const parseTag = (tag,
     }
     ++i;
   });
-  return res;
 };
 
 const splitContent = (html, start, parentNode, slots,
@@ -50,18 +48,17 @@ const parse = (html, slots,
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
         nextChar = html[start],
-        splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, slots);
-    let voidElement;
+        splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, slots),
+        res = { _terser_name: '' , _terser_voidElement: false, _terser_attrs: {} };
     if (isOpen) {
       level++;
-      let name;
-      ({_terser_name: name, _terser_voidElement: voidElement} = parseTag(tag));
-      const currNode = document.createElement(name), parent = arr[level - 1];
+      parseTag(tag, res);
+      const currNode = document.createElement(res._terser_name), parent = arr[level - 1];
       splitNext(currNode);
       if (parent) parent.append(currNode);
       arr[level] = currNode;
     }
-    if (!isOpen || voidElement) {
+    if (!isOpen || res._terser_voidElement) {
       splitNext(arr[--level]);
     }
   });
