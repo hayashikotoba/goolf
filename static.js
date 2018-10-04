@@ -7,7 +7,8 @@ const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 const voidElements = new Set(['br','col','hr','img','input','link','meta']);
 const DELIMITER = 'Þ';
 
-const randomId = () => '_' + Math.random().toString(36).substr(2, 9);
+// https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
+const randomId = () => Date.now() + Math.random();
 
 const parseTag = tag => {
   let i = 0, key;
