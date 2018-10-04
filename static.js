@@ -10,9 +10,11 @@ const DELIMITER = 'Þ';
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
 const randomId = () => Date.now() + Math.random();
 
-const parseTag = tag => {
-  let i = 0, key;
-  const res = { name: '' , voidElement: false, attrs: {} };
+const parseTag = (tag,
+    /* Golf variable declaration. */
+    i = 0,
+    key,
+    res = { name: '' , voidElement: false, attrs: {} }) => {
   tag.replace(ATTR_REGEX, match => {
     if (i % 2) {
       key = match;
@@ -27,9 +29,10 @@ const parseTag = tag => {
   return res;
 };
 
-const splitContent = (html, start, parentNode, placeholders) => {
-  const content = html.slice(start, html.indexOf('<', start)),
-    tokens = content.split(DELIMITER);
+const splitContent = (html, start, parentNode, placeholders,
+    /* Golf variable declaration. */
+    content = html.slice(start, html.indexOf('<', start)),
+    tokens = content.split(DELIMITER)) => {
   if(tokens[0].trim().length > 0)
     parentNode.appendChild(document.createTextNode(tokens[0]));
   for (let i = 1, len = tokens.length; i < len; ++i) {
@@ -41,9 +44,9 @@ const splitContent = (html, start, parentNode, placeholders) => {
   }
 };
 
-const parse = html => {
-  let level = -1;
-  const arr = [], placeholders = [];
+const parse = (html,
+    /* Golf variable declaration. */
+    level = -1, arr = [], placeholders = [])=> {
   html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
@@ -95,8 +98,9 @@ const updateSlot = (slot, value) => {
   }
 };
 
-StaticJS = () => {
-  let _slots, _values;
+StaticJS = (
+    /* Golf variable declaration. */
+    _slots, _values) => {
   return (strings, ...values) => {
     if (!_slots) {
       const {_terser_frag: frag, _terser_slots: slots} = parse(strings.join(DELIMITER).trim());
