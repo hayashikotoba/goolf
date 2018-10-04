@@ -26,6 +26,20 @@ test('one slots', () => {
   expectHtml(frag).toBe('<div>5</div>')
 });
 
+test('updating one slots', () => {
+  const blueprint = $component();
+  const frag = blueprint`<div>${5}</div>`;
+  blueprint`<div>${4}</div>`;
+  expectHtml(frag).toBe('<div>4</div>')
+});
+
+test('updating one slot with null', () => {
+  const blueprint = $component();
+  const frag = blueprint`<div>${5}</div>`;
+  blueprint`<div>${null}</div>`;
+  expectHtml(frag).toBe('<div></div>')
+});
+
 test('multiple slots', () => {
   const frag = $component()`<div> A ${1} , B: ${2} , C: ${3}</div>`;
   expectHtml(frag).toBe('<div> A 1 , B: 2 , C: 3</div>')
