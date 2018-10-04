@@ -43,9 +43,9 @@ const splitContent = (html, start, parentNode, slots,
   }
 };
 
-const parse = (html,
+const parse = (html, slots,
     /* Golf variable declaration. */
-    level = -1, arr = [], slots = [])=> {
+    level = -1, arr = [])=> {
   html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
@@ -70,7 +70,6 @@ const parse = (html,
   frag.appendChild(arr[0]);
   return {
     _terser_frag: frag,
-    _terser_slots: slots
   };
 };
 
@@ -99,7 +98,8 @@ StaticJS = () => {
   let _slots, _values ;
   return (strings, ...values) => {
     if (!_slots) {
-      const {_terser_frag: frag, _terser_slots: slots} = parse(strings.join(DELIMITER).trim());
+      const slots = [];
+      const {_terser_frag: frag} = parse(strings.join(DELIMITER).trim(), slots);
       for (let i = 0, len = slots.length; i < len; ++i) {
         const value = values[i];
         if(Array.isArray(value)) {
