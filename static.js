@@ -14,15 +14,15 @@ const parseTag = (tag,
     /* Golf variable declaration. */
     i = 0,
     key,
-    res = { name: '' , voidElement: false, attrs: {} }) => {
+    res = { _terser_name: '' , _terser_voidElement: false, _terser_attrs: {} }) => {
   tag.replace(ATTR_REGEX, match => {
     if (i % 2) {
       key = match;
     } else if (i === 0) {
-      if (voidElements.has(match) || tag[tag.length - 2] === '/') res.voidElement = true;
-      res.name = match;
+      if (voidElements.has(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
+      res._terser_name = match;
     } else {
-      res.attrs[key] = match.replace(/['"]/g, '');
+      res._terser_attrs[key] = match.replace(/['"]/g, '');
     }
     ++i;
   });
@@ -55,7 +55,7 @@ const parse = (html,
     if (isOpen) {
       level++;
       let name;
-      ({name, voidElement} = parseTag(tag));
+      ({_terser_name: name, _terser_voidElement: voidElement} = parseTag(tag));
       const currNode = document.createElement(name), parent = arr[level - 1];
       if (!voidElement && nextChar && nextChar !== '<')
         splitContent(html, start, currNode, placeholders);
