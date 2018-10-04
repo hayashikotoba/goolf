@@ -94,7 +94,7 @@ const updateSlot = (slot, value) => {
   }
 };
 
-const component = () => {
+window.StaticJS = () => {
   let _slots, _values;
   return (strings, ...values) => {
     if (!_slots) {
@@ -126,13 +126,4 @@ const component = () => {
     }
   }
 };
-
-const StaticJs = {
-  $component: component,
-};
-window.StaticJs = StaticJs;
-if(module) {
-  module.exports = StaticJs;
-}
-
 })();
