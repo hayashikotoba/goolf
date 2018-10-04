@@ -45,7 +45,7 @@ const splitContent = (html, start, parentNode, slots,
 
 const parse = (html, slots,
     /* Golf variable declaration. */
-    level = -1, arr = [])=> {
+    level = -1, arr = [], frag = document.createDocumentFragment())=> {
   html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
@@ -65,10 +65,7 @@ const parse = (html, slots,
       splitNext(arr[--level]);
     }
   });
-
-  const frag = document.createDocumentFragment();
-  frag.appendChild(arr[0]);
-  return frag;
+  return frag.appendChild(arr[0]), frag;
 };
 
 const updateSlot = (slot, value) => {
