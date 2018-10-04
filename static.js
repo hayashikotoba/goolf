@@ -17,7 +17,7 @@ const parseTag = (tag, res,
   tag.replace(ATTR_REGEX, match => {
     if (i % 2) {
       key = match;
-    } else if (i === 0) {
+    } else if (!i) { // First match, i === 0.
       if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
       res._terser_name = match;
     } else {
