@@ -8,7 +8,7 @@ const voidElements = ['br','col','hr','img','input','link','meta'];
 const DELIMITER = 'Þ';
 
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
-const randomId = () => Date.now() + Math.random();
+const randomId = () => Math.random() + Date.now();
 
 const parseTag = (tag, res,
     /* Golf variable declaration. */
