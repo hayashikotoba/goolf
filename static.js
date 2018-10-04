@@ -32,15 +32,14 @@ const parseTag = (tag,
 const splitContent = (html, start, parentNode, placeholders,
     /* Golf variable declaration. */
     content = html.slice(start, html.indexOf('<', start)),
-    tokens = content.split(DELIMITER)) => {
-  if(tokens[0].trim().length > 0)
-    parentNode.appendChild(document.createTextNode(tokens[0]));
+    tokens = content.split(DELIMITER),
+    addTextNode = i => tokens[i].trim().length > 0 && parentNode.appendChild(document.createTextNode(tokens[i]))) => {
+  addTextNode(0);
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = document.createTextNode(DELIMITER);
     parentNode.appendChild(element);
     placeholders.push(element);
-    if(tokens[i].trim().length > 0)
-      parentNode.appendChild(document.createTextNode(tokens[i]));
+    addTextNode(i);
   }
 };
 
@@ -50,23 +49,20 @@ const parse = (html,
   html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
-        nextChar = html[start];
+        nextChar = html[start],
+        splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, placeholders);
     let voidElement;
     if (isOpen) {
       level++;
       let name;
       ({_terser_name: name, _terser_voidElement: voidElement} = parseTag(tag));
       const currNode = document.createElement(name), parent = arr[level - 1];
-      if (!voidElement && nextChar && nextChar !== '<')
-        splitContent(html, start, currNode, placeholders);
+      splitNext(currNode);
       if (parent) parent.append(currNode);
       arr[level] = currNode;
     }
     if (!isOpen || voidElement) {
-      level--;
-      // trailing content after last child.
-      if (nextChar !== '<' && nextChar)
-        splitContent(html, start, arr[level], placeholders);
+      splitNext(arr[--level]);
     }
   });
 
