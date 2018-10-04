@@ -89,8 +89,7 @@ StaticJS = () => {
   let slots, _values ;
   return (strings, ...values) => {
     if (!slots) {
-      slots = [];
-      const componentFrag = parse(strings.join(DELIMITER).trim(), slots);
+      const componentFrag = parse(strings.join(DELIMITER).trim(), slots = []);
       for (let i = 0, len = slots.length; i < len; ++i) {
         const value = values[i];
         if(Array.isArray(value)) {
