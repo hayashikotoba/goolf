@@ -29,7 +29,7 @@ const parseTag = (tag,
   return res;
 };
 
-const splitContent = (html, start, parentNode, placeholders,
+const splitContent = (html, start, parentNode, slots,
     /* Golf variable declaration. */
     content = html.slice(start, html.indexOf('<', start)),
     tokens = content.split(DELIMITER),
@@ -38,19 +38,19 @@ const splitContent = (html, start, parentNode, placeholders,
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = document.createTextNode(DELIMITER);
     parentNode.appendChild(element);
-    placeholders.push({_terser_node: element, _terser_parent: element.parentNode});
+    slots.push({_terser_node: element, _terser_parent: element.parentNode});
     addTextNode(i);
   }
 };
 
 const parse = (html,
     /* Golf variable declaration. */
-    level = -1, arr = [], placeholders = [])=> {
+    level = -1, arr = [], slots = [])=> {
   html.replace(TAG_RE, (tag, index) => {
     const isOpen = tag[1] !== '/',
         start = index + tag.length,
         nextChar = html[start],
-        splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, placeholders);
+        splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, slots);
     let voidElement;
     if (isOpen) {
       level++;
@@ -70,7 +70,7 @@ const parse = (html,
   frag.appendChild(arr[0]);
   return {
     _terser_frag: frag,
-    _terser_slots: placeholders
+    _terser_slots: slots
   };
 };
 
