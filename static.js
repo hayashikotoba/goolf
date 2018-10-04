@@ -111,8 +111,7 @@ window.StaticJS = () => {
           updateSlot(slots[i], value);
         }
       }
-      frag.uuid = randomId();
-      frag.firstChild.uuid = frag.uuid;
+      frag.firstChild.uuid = frag.uuid = randomId();
       _slots = slots;
       _values = values;
       return frag;
