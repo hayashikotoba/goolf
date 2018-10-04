@@ -34,8 +34,7 @@ const splitContent = (html, start, parentNode, slots,
     addTextNode = i => tokens[i].trim().length > 0 && parentNode.appendChild(document.createTextNode(tokens[i]))) => {
   addTextNode(0);
   for (let i = 1, len = tokens.length; i < len; ++i) {
-    const element = document.createTextNode(DELIMITER);
-    parentNode.appendChild(element);
+    const element = parentNode.appendChild(document.createTextNode(DELIMITER));
     slots.push({_terser_node: element, _terser_parent: element.parentNode});
     addTextNode(i);
   }
