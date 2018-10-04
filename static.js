@@ -95,7 +95,7 @@ const updateSlot = (slot, value) => {
   }
 };
 
-window.StaticJS = () => {
+StaticJS = () => {
   let _slots, _values;
   return (strings, ...values) => {
     if (!_slots) {

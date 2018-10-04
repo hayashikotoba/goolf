@@ -1,5 +1,5 @@
 require('./dist/static.min');
-const {StaticJS: $component} = window;
+const $component = StaticJS;
 
 function fragToHtml(frag) {
   const div = document.createElement('div');
