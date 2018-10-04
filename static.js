@@ -82,10 +82,10 @@ const updateSlot = (slot, value) => {
     const {_terser_parent: parent} = slot;
     const {childNodes} = parent;
     for(let i=j=0;i < childNodes.length && j < value.length;) {
-      const uuid = childNodes[i].uuid;
-      if(!uuid) i++;
-      else if (uuid == value[j].uuid) i++, j++;
-      else if(value.some(e => e.uuid == uuid)) parent.insertBefore(value[j++], parent.childNodes[i++]);
+      const _terser_uuid = childNodes[i]._terser_uuid;
+      if(!_terser_uuid) i++;
+      else if (_terser_uuid == value[j]._terser_uuid) i++, j++;
+      else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], parent.childNodes[i++]);
       else parent.removeChild(parent.childNodes[i]);
     }
     while(j < value.length) parent.appendChild(value[j++]);
@@ -111,7 +111,7 @@ window.StaticJS = () => {
           updateSlot(slots[i], value);
         }
       }
-      frag.firstChild.uuid = frag.uuid = randomId();
+      frag.firstChild._terser_uuid = frag._terser_uuid = randomId();
       _slots = slots;
       _values = values;
       return frag;
