@@ -85,14 +85,15 @@ const updateSlot = (slot, value) => {
   } else if (Array.isArray(value)) {
     const {_terser_parent: parent} = slot;
     const {childNodes} = parent;
-    for(let i=j=0;i < childNodes.length && j < value.length;) {
+    const length = value.length;
+    for(let i=j=0;i < childNodes.length && j < length;) {
       const _terser_uuid = childNodes[i]._terser_uuid;
       if(!_terser_uuid) i++;
       else if (_terser_uuid == value[j]._terser_uuid) i++, j++;
       else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], childNodes[i++]);
       else parent.removeChild(childNodes[i]);
     }
-    while(j < value.length) parent.appendChild(value[j++]);
+    while(j < length) parent.appendChild(value[j++]);
   } else {
     slot._terser_node.nodeValue = value;
   }
