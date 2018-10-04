@@ -49,7 +49,7 @@ const parse = (html, slots,
         start = index + tag.length,
         nextChar = html[start],
         splitNext = node => nextChar && nextChar !== '<' && splitContent(html, start, node, slots),
-        res = { _terser_name: '' , _terser_voidElement: false, _terser_attrs: {} };
+        res = {_terser_name: ''};
     if (isOpen) {
       level++;
       parseTag(tag, res);
