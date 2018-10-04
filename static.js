@@ -4,7 +4,7 @@ const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
 const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-const voidElements = new Set(['br','col','hr','img','input','link','meta']);
+const voidElements = ['br','col','hr','img','input','link','meta'];
 const DELIMITER = 'Þ';
 
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
@@ -19,7 +19,7 @@ const parseTag = (tag,
     if (i % 2) {
       key = match;
     } else if (i === 0) {
-      if (voidElements.has(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
+      if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
       res._terser_name = match;
     } else {
       res._terser_attrs[key] = match.replace(/['"]/g, '');
