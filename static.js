@@ -89,8 +89,8 @@ const updateSlot = (slot, value) => {
       const _terser_uuid = childNodes[i]._terser_uuid;
       if(!_terser_uuid) i++;
       else if (_terser_uuid == value[j]._terser_uuid) i++, j++;
-      else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], parent.childNodes[i++]);
-      else parent.removeChild(parent.childNodes[i]);
+      else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], childNodes[i++]);
+      else parent.removeChild(childNodes[i]);
     }
     while(j < value.length) parent.appendChild(value[j++]);
   } else {
