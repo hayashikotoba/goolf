@@ -85,7 +85,7 @@ const updateSlot = (slot, value) => {
   }
 };
 
-StaticJS = () => {
+Goolf = () => {
   let slots, _values ;
   return (strings, ...values) => {
     if (!slots) {

@@ -5,7 +5,7 @@ const beautify = require('gulp-beautify');
 const size = require('gulp-size');
 const terser = require('gulp-terser');
 
-const SOURCE_FILE = 'static.js';
+const SOURCE_FILE = 'goolf.js';
 const OUTPUT_DIRECTORY = 'dist';
 const BABEL_CONFIG = {
   presets: [],

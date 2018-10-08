@@ -1,8 +1,7 @@
 {
-  "name": "framework",
+  "name": "goolf",
   "version": "1.0.0",
-  "description": "Static.js is a minimalist JavaScript nano ViewModel framework for building stateful web applications characterized by persistent DOM structures.",
-  "main": "static.js",
+  "description": "Goolf is a minimalist JavaScript nano ViewModel binding for building stateful web applications characterized by persistent DOM structures.",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -23,10 +22,6 @@
     "type": "git",
     "url": "git+https://github.com/alephnan/static.js.git"
   },
-  "author": "",
+  "author": "Tuan Vo",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alephnan/static.js/issues"
-  },
-  "homepage": "https://github.com/alephnan/static.js#readme"
 }

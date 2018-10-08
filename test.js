@@ -1,5 +1,5 @@
-require('./dist/static.min');
-const $component = StaticJS;
+require('./dist/goolf.min');
+const $component = Goolf;
 
 function fragToHtml(frag) {
   const div = document.createElement('div');
