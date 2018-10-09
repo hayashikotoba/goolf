@@ -5,6 +5,7 @@ const beautify = require('gulp-beautify');
 const size = require('gulp-size');
 const terser = require('gulp-terser');
 const replace = require('gulp-string-replace');
+const eslint = require('gulp-eslint');
 
 const SOURCE_FILE = 'src/goolf.js';
 const OUTPUT_DIRECTORY = 'dist';
@@ -41,11 +42,11 @@ const configurations = {
   }
 };
 
+const buildTaskName = config => `build-${config}`
 
 Object.keys(configurations).forEach(key  => {
   const {global_defs, replace_const} = configurations[key];
-
-  gulp.task( key , () => {
+  gulp.task( buildTaskName(key) , () => {
     let pipe = gulp
       .src(SOURCE_FILE);
     if(replace_const) {
@@ -78,5 +79,13 @@ Object.keys(configurations).forEach(key  => {
       .pipe(gulp.dest(OUTPUT_DIRECTORY));
   });
 });
+gulp.task('builds', gulp.parallel(Object.keys(configurations).map(buildTaskName)));
 
-gulp.task('default',  gulp.parallel(Object.keys(configurations)));
+gulp.task('lint', () => {
+  return gulp.src([SOURCE_FILE])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+
+gulp.task('default',  gulp.series('lint', 'builds'));

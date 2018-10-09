@@ -5,9 +5,12 @@
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "eslint": "^5.6.1",
+    "eslint-config-google": "^0.10.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-beautify": "^2.0.1",
+    "gulp-eslint": "^5.0.0",
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-size": "^3.0.0",

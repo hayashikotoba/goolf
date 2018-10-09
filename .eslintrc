@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+      "ecmaVersion": 6
+  },
+  "extends": "google",
+  "rules": {
+    "indent": [0, 2],
+    "arrow-parens": 0,
+    "max-len": 0,
+    "curly": 0,
+    "camelcase": 0,
+    "one-var": 0
+  }
+}
