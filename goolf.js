@@ -15,15 +15,17 @@ const parseTag = (tag, res,
     i = 0,
     key) => {
   tag.replace(ATTR_REGEX, match => {
-    if (i % 2) {
+    if (_ATTR && i % 2) {
       key = match;
     } else if (!i) { // First match, i === 0.
       if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
       res._terser_name = match;
-    } else {
+    } else if (_ATTR) {
       res._terser_attrs[key] = match.replace(/['"]/g, '');
     }
-    ++i;
+    if(_ATTR) {
+      ++i;
+    }
   });
 };
 

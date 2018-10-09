@@ -27,6 +27,9 @@ gulp.task('default', function() {
         inline: 1, // inline function body.
         passes: 3, // number of times to re-compress.
         unsafe: true,
+        global_defs: {
+          _ATTR: false,
+        }
       },
       mangle: {
         properties: {
