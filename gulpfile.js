@@ -6,7 +6,7 @@ const size = require('gulp-size');
 const terser = require('gulp-terser');
 const replace = require('gulp-string-replace');
 
-const SOURCE_FILE = 'goolf.js';
+const SOURCE_FILE = 'src/goolf.js';
 const OUTPUT_DIRECTORY = 'dist';
 const BABEL_CONFIG = {
   presets: [],
