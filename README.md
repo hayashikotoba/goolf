@@ -1,61 +1,45 @@
-# Static.js
+# Goolf
 
-Static.js is a minimalist JavaScript nano ViewModel framework for building stateful web applications
-characterized by persistent DOM structures.
+Goolf is a sub-1kB ViewModel with support for component-based (tree) architectures.
+
+Templates are declared with ES6 Template Literals. Modern browsers
+support this out-of-the-box, eliminating complicated tooling to compile templates (ie: JSX).
+
+The distributable is configurable. Unused features can be flagged off for
+dead-code elimination. The most basic configuration weighs-in at below 500 bytes.
 
 - **minimal** — restraint in design, philosophy, feature creep
-- **standalone** — zero runtime, build, tooling dependencies
-- **lightweight** — targets 1kB distribution
-- **standard** — leverages modern JavaScript constructs. There is no DSL to learn.
-- **focused** — rendering views expressed as template literals to the DOM
-- **simple** — small API surface
-- **tailored** — not intended to be general purpose and addresses a narrow class of web applications
+- **standalone** — library has zero dependencies
+- **lightweight** — targets sub-1kB distributable
+- **focused** — bind view to state. that's it.
+- **simple** — small API surface.
+- **tailored** — not general purpose and addresses a narrow class of web applications
+- **modern** - leverage ES6 Template Literals in modern browsers
+- **configurable** - pay (in bytes) for only the used features 
 
 ### Assumptions / Constraints
 
-1. The template is static and persistent. There are stateful slots, but the HTML is static.
+1. Template archectype is persistent. The number of slots is unchanged
 2. Users plugs in their own controller mechanism.
-3. Placeholders always have a parent node, and are not the root.
+3. Slots always have a parent node, and are not the root.
 4. Slots do not change type
-5. Slots containing array of Frags will not have siblings (as implementatino clear all children of parent)
+5. Slots containing array of Frags will not have siblings (implementation clear all children of parent)
 6. Components have a single root.
-7. Array slot is updated, but never to null.
-
-As correlary to (1), the number of slots are fixed, their nodes cacheable.
+7. Array slot may be updated to other arrays, but never to null.
 
 ### Real DOM
 
-Currently, the implementation does direct DOM manipulation. No Virtualized DOM or similar abstraction.
-References to nodes associated with the slots are held in-memory, and they are mutated when
-the data associated with the slot is updated.
-
-The implementation does build an AST, which *is* a virtualization of the DOM, but this step is
-for placing the slot nodes, and retaining references to them. This operation is performed once, and
-not for the purposes of DIFF/PATCH against the DOM.
-
-A benefit real DOM mutation is not needing to synchronize between VDOM and other direct DOM
-manipulations.
+Goolf performs direct DOM manipulation.
+There is no overhead of syncing to virtualized DOM or similar abstraction.
+References to nodes associated with the slots are held in-memory, and mutated when slot DIFF.
 
 ### ViewModel
 
-In model–view–viewmodel ( MVVM ) architectural pattern, the viewmodel is the glue mediating the
-view and the model. With Static.js, users specify the view as a Template Literal, the model as,
+In model–view–viewmodel ( MVVM ), viewmodel is the glue mediating
+view and model. With Goolf, users specify the view as a Template Literal, the model as,
 without loss of generality, an arbitrary JavaScript Object, and the ViewModel is the mapping
 from the model to the View.
 
-Data flow is uni-directional. The view maps *from* state, but not vice versa.
+Data flow is uni-directional. State maps to views, but not vice versa.
 
-There is no control mechanism induced here.
-
-### Template Directives
-
-There are none.
-
-### Backlog
-- Allow clients to build a customized distribution from source, with only the features they need. Akin to NGINX modules.
-   - Modularize features of the ViewModel layer
-   - Provide additional App layers in addition to the ViewModel, such as a Function-Reactive abstraction
-   - Merge the AST construction and DOM insertion into a single pass.
-   - Convert DOM insertion from a recursive to a iterative implementation. Can be folded into previous task.
-   - Potentially support for-loops / dynamic number of slots, with sub components
-
+There is no control control mechanism induced here.
