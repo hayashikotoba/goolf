@@ -22,14 +22,16 @@ const configurations = {
     _VOID_ELEMENTS: ['br','col','hr','img','input','link','meta'],
     _VOID: true,
     _WHITESPACE: true,
-    _DELIMITER: 'Þ'
+    _DELIMITER: 'Þ',
+    _COMPONENTS: true,
   },
   'basic': {
     _ARRAY: false,
     _ATTR: false,
     _VOID: false,
     _WHITESPACE: false,
-    _DELIMITER: 'Þ'
+    _DELIMITER: 'Þ',
+    _COMPONENTS: false,
   }
 };
 
@@ -47,7 +49,7 @@ Object.keys(configurations).forEach(key  => {
           inline: 1, // inline function body.
           passes: 4, // number of times to re-compress.
           unsafe: true,
-          global_defs: configurations[key]
+          global_defs: configurations[key],
         },
         mangle: {
           properties: {

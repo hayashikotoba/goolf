@@ -39,7 +39,11 @@ const splitContent = (html, start, parentNode, slots,
   addTextNode(0);
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = parentNode.appendChild(document.createTextNode(DELIMITER));
-    slots.push({_terser_node: element, _terser_parent: element.parentNode});
+    if(_COMPONENTS) {
+      slots.push({_terser_node: element, _terser_parent: element.parentNode});
+    } else {
+      slots.push(element);
+    }
     addTextNode(i);
   }
 };
@@ -71,23 +75,27 @@ const parse = (html, slots,
 };
 
 const updateSlot = (slot, value) => {
-  // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
-  if(value && value.nodeType == 11) {
-    slot._terser_node.parentNode.replaceChild(value, slot._terser_node);
-  } else if (_ARRAY && Array.isArray(value)) {
-    const {_terser_parent: parent} = slot;
-    const {childNodes} = parent;
-    const length = value.length;
-    for(let i=j=0;i < childNodes.length && j < length;) {
-      const _terser_uuid = childNodes[i]._terser_uuid;
-      if(!_terser_uuid) i++;
-      else if (_terser_uuid == value[j]._terser_uuid) i++, j++;
-      else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], childNodes[i++]);
-      else parent.removeChild(childNodes[i]);
+  if(_COMPONENTS) {
+    // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
+    if(value && value.nodeType == 11) {
+      slot._terser_node.parentNode.replaceChild(value, slot._terser_node);
+    } else if (_ARRAY && Array.isArray(value)) {
+      const {_terser_parent: parent} = slot;
+      const {childNodes} = parent;
+      const length = value.length;
+      for(let i=j=0;i < childNodes.length && j < length;) {
+        const _terser_uuid = childNodes[i]._terser_uuid;
+        if(!_terser_uuid) i++;
+        else if (_terser_uuid == value[j]._terser_uuid) i++, j++;
+        else if(value.some(e => e._terser_uuid == _terser_uuid)) parent.insertBefore(value[j++], childNodes[i++]);
+        else parent.removeChild(childNodes[i]);
+      }
+      while(j < length) parent.appendChild(value[j++]);
+    } else {
+      slot._terser_node.nodeValue = value;
     }
-    while(j < length) parent.appendChild(value[j++]);
   } else {
-    slot._terser_node.nodeValue = value;
+    slot.nodeValue = value;
   }
 };
 
