@@ -11,20 +11,22 @@
     "gulp-babel": "^8.0.0",
     "gulp-beautify": "^2.0.1",
     "gulp-eslint": "^5.0.0",
+    "gulp-jest": "^4.0.2",
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-size": "^3.0.0",
     "gulp-string-replace": "^1.1.1",
     "gulp-terser": "^1.1.5",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0"
   },
   "scripts": {
     "test": "jest",
-    "minify": "gulp"
+    "release": "gulp"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alephnan/static.js.git"
+    "url": "git+https://github.com/alephnan/goolf.git"
   },
   "author": "Tuan Vo",
   "license": "ISC"

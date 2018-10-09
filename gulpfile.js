@@ -1,11 +1,12 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const rename = require("gulp-rename");
 const beautify = require('gulp-beautify');
-const size = require('gulp-size');
-const terser = require('gulp-terser');
-const replace = require('gulp-string-replace');
 const eslint = require('gulp-eslint');
+const jest = require('gulp-jest').default;
+const rename = require('gulp-rename');
+const size = require('gulp-size');
+const replace = require('gulp-string-replace');
+const terser = require('gulp-terser');
 
 const SOURCE_FILE = 'src/goolf.js';
 const OUTPUT_DIRECTORY = 'dist';
@@ -88,4 +89,8 @@ gulp.task('lint', () => {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('default',  gulp.series('lint', 'builds'));
+gulp.task('test', function () {
+  return gulp.src('./test/').pipe(jest());
+});
+
+gulp.task('default',  gulp.series('lint', 'builds', 'test'));
