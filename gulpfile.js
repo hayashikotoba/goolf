@@ -4,6 +4,7 @@ const rename = require("gulp-rename");
 const beautify = require('gulp-beautify');
 const size = require('gulp-size');
 const terser = require('gulp-terser');
+const replace = require('gulp-string-replace');
 
 const SOURCE_FILE = 'goolf.js';
 const OUTPUT_DIRECTORY = 'dist';
@@ -17,29 +18,40 @@ const BEAUTIFY_CONFIG = {
 
 const configurations = {
   'full': {
-    _ATTR: true,
-    _ARRAY: true,
-    _VOID_ELEMENTS: ['br','col','hr','img','input','link','meta'],
-    _VOID: true,
-    _WHITESPACE: true,
-    _DELIMITER: 'Þ',
-    _COMPONENTS: true,
+    global_defs: {
+      _ATTR: true,
+      _ARRAY: true,
+      _VOID_ELEMENTS: ['br','col','hr','img','input','link','meta'],
+      _VOID: true,
+      _WHITESPACE: true,
+      _DELIMITER: 'Þ',
+      _COMPONENTS: true,
+    }
   },
   'basic': {
-    _ARRAY: false,
-    _ATTR: false,
-    _VOID: false,
-    _WHITESPACE: false,
-    _DELIMITER: 'Þ',
-    _COMPONENTS: false,
+    replace_const: true,
+    global_defs: {
+      _ARRAY: false,
+      _ATTR: false,
+      _VOID: false,
+      _WHITESPACE: false,
+      _DELIMITER: 'Þ',
+      _COMPONENTS: false,
+    }
   }
 };
 
 
 Object.keys(configurations).forEach(key  => {
+  const {global_defs, replace_const} = configurations[key];
+
   gulp.task( key , () => {
-    return gulp
-      .src(SOURCE_FILE)
+    let pipe = gulp
+      .src(SOURCE_FILE);
+    if(replace_const) {
+      pipe = pipe.pipe(replace(/const /g, 'let ', {logs: false}));
+    }
+    return pipe
       .pipe(babel(BABEL_CONFIG))
       .pipe(terser({
         ecma: 5,
@@ -49,7 +61,7 @@ Object.keys(configurations).forEach(key  => {
           inline: 1, // inline function body.
           passes: 4, // number of times to re-compress.
           unsafe: true,
-          global_defs: configurations[key],
+          global_defs,
         },
         mangle: {
           properties: {
