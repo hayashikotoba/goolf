@@ -35,7 +35,7 @@ const splitContent = (html, start, parentNode, slots,
     /* Golf variable declaration. */
     content = html.slice(start, html.indexOf('<', start)),
     tokens = content.split(DELIMITER),
-    addTextNode = i => tokens[i].trim().length > 0 && parentNode.appendChild(document.createTextNode(tokens[i]))) => {
+    addTextNode = i => (_WHITESPACE ? tokens[i].trim() : tokens[i]).length > 0 && parentNode.appendChild(document.createTextNode(tokens[i]))) => {
   addTextNode(0);
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = parentNode.appendChild(document.createTextNode(DELIMITER));
@@ -95,7 +95,8 @@ Goolf = () => {
   let slots, _values ;
   return (strings, ...values) => {
     if (!slots) {
-      const componentFrag = parse(strings.join(DELIMITER).trim(), slots = []);
+      const html = _WHITESPACE ? strings.join(DELIMITER).trim() : strings.join(DELIMITER);
+      const componentFrag = parse(html, slots = []);
       if(_ARRAY) {
         for (let i = 0, len = slots.length; i < len; ++i) {
           const value = values[i];

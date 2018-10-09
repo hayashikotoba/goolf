@@ -20,12 +20,14 @@ const configurations = {
     _ATTR: true,
     _ARRAY: true,
     _VOID_ELEMENTS: ['br','col','hr','img','input','link','meta'],
-    _VOID: true
+    _VOID: true,
+    _WHITESPACE: true,
   },
   'basic': {
     _ARRAY: false,
     _ATTR: false,
-    _VOID: false
+    _VOID: false,
+    _WHITESPACE: false
   }
 };
 
