@@ -5,8 +5,11 @@
   "extends": "google",
   "rules": {
     "indent": [0, 2],
-    "arrow-parens": 0,
-    "max-len": 0,
+    "arrow-parens": ["error", "as-needed"],
+    "max-len":   ["warn", {
+      "comments": 80,
+      "code": 100
+    }],
     "curly": 0,
     "one-var": 0
   }

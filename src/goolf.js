@@ -18,7 +18,8 @@ const parseTag = (tag, res,
       key = match;
     } else if (!i) { // First match, i === 0.
       if (_VOID) {
-        if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
+        if (voidElements.includes(match) || tag[tag.length - 2] === '/')
+          res._terser_voidElement = true;
       }
       res._terser_name = match;
     } else if (_ATTR) {
@@ -34,7 +35,9 @@ const splitContent = (html, start, parentNode, slots,
     /* Golf variable declaration. */
     content = html.slice(start, html.indexOf('<', start)),
     tokens = content.split(DELIMITER),
-    addTextNode = i => (_WHITESPACE ? tokens[i].trim() : tokens[i]).length > 0 && parentNode.appendChild(document.createTextNode(tokens[i]))) => {
+    addTextNode = i => (_WHITESPACE ? tokens[i].trim() : tokens[i]).length > 0 &&
+        parentNode.appendChild(document.createTextNode(tokens[i]))
+    ) => {
   addTextNode(0);
   for (let i = 1, len = tokens.length; i < len; ++i) {
     const element = parentNode.appendChild(document.createTextNode(DELIMITER));
