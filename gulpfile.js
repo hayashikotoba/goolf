@@ -18,8 +18,10 @@ const BEAUTIFY_CONFIG = {
 const configurations = {
   'full': {
     _ATTR: true,
+    _ARRAY: true,
   },
   'basic': {
+    _ARRAY: false,
     _ATTR: false,
   }
 };
@@ -36,7 +38,7 @@ Object.keys(configurations).forEach(key  => {
           drop_console: true,
           drop_debugger: true,
           inline: 1, // inline function body.
-          passes: 3, // number of times to re-compress.
+          passes: 4, // number of times to re-compress.
           unsafe: true,
           global_defs: configurations[key]
         },

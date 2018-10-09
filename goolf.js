@@ -70,7 +70,7 @@ const updateSlot = (slot, value) => {
   // nodeType 11 == Node.DOCUMENT_FRAGMENT_NODE.
   if(value && value.nodeType == 11) {
     slot._terser_node.parentNode.replaceChild(value, slot._terser_node);
-  } else if (Array.isArray(value)) {
+  } else if (_ARRAY && Array.isArray(value)) {
     const {_terser_parent: parent} = slot;
     const {childNodes} = parent;
     const length = value.length;
@@ -92,19 +92,25 @@ Goolf = () => {
   return (strings, ...values) => {
     if (!slots) {
       const componentFrag = parse(strings.join(DELIMITER).trim(), slots = []);
-      for (let i = 0, len = slots.length; i < len; ++i) {
-        const value = values[i];
-        if(Array.isArray(value)) {
-          slots[i]._terser_node.nodeValue = '';
-          const frag = document.createDocumentFragment();
-          for(let j = 0, len = value.length; j < len;)
-            frag.appendChild(value[j++]);
-          slots[i]._terser_parent.appendChild(frag);
-        } else {
-          updateSlot(slots[i], value);
+      if(_ARRAY) {
+        for (let i = 0, len = slots.length; i < len; ++i) {
+          const value = values[i];
+          if(Array.isArray(value)) {
+            slots[i]._terser_node.nodeValue = '';
+            const frag = document.createDocumentFragment();
+            for(let j = 0, len = value.length; j < len;)
+              frag.appendChild(value[j++]);
+            slots[i]._terser_parent.appendChild(frag);
+          } else {
+            updateSlot(slots[i], value);
+          }
+        }
+        componentFrag.firstChild._terser_uuid = componentFrag._terser_uuid = randomId();
+      } else {
+        for (let i = 0, len = slots.length; i < len; ++i) {
+          updateSlot(slots[i], values[i]);
         }
       }
-      componentFrag.firstChild._terser_uuid = componentFrag._terser_uuid = randomId();
       _values = values;
       return componentFrag;
     } else {
