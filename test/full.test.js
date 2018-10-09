@@ -1,4 +1,4 @@
-require('./dist/goolf.full.min');
+require('../dist/goolf.full.min');
 
 const $component = Goolf;
 
