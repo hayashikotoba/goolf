@@ -4,7 +4,7 @@ const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
 const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-const voidElements = ['br','col','hr','img','input','link','meta'];
+const voidElements = _VOID_ELEMENTS;
 const DELIMITER = 'Þ';
 
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
@@ -18,7 +18,9 @@ const parseTag = (tag, res,
     if (_ATTR && i % 2) {
       key = match;
     } else if (!i) { // First match, i === 0.
-      if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
+      if(_VOID) {
+        if (voidElements.includes(match) || tag[tag.length - 2] === '/') res._terser_voidElement = true;
+      }
       res._terser_name = match;
     } else if (_ATTR) {
       res._terser_attrs[key] = match.replace(/['"]/g, '');
@@ -59,8 +61,10 @@ const parse = (html, slots,
       if (parent) parent.append(currNode);
       arr[level] = currNode;
     }
-    if (!isOpen || res._terser_voidElement) {
-      splitNext(arr[--level]);
+    if(_VOID) {
+      if (!isOpen || res._terser_voidElement) {
+        splitNext(arr[--level]);
+      }
     }
   });
   return frag.appendChild(arr[0]), frag;
