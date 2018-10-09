@@ -15,33 +15,45 @@ const BEAUTIFY_CONFIG = {
   indent_size: 2,
 };
 
-gulp.task('default', function() {
-  return gulp
-    .src(SOURCE_FILE)
-    .pipe(babel(BABEL_CONFIG))
-    .pipe(terser({
-      ecma: 5,
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        inline: 1, // inline function body.
-        passes: 3, // number of times to re-compress.
-        unsafe: true,
-        global_defs: {
-          _ATTR: false,
-        }
-      },
-      mangle: {
-        properties: {
-          regex: /^(_terser_)/
-        }
-      },
-    }))
-    .pipe(rename({ suffix: ".min" }))
-    .pipe(size({showFiles: true}))
-    .pipe(size({showFiles: true, gzip: true}))
-    .pipe(gulp.dest(OUTPUT_DIRECTORY))
-    .pipe(beautify(BEAUTIFY_CONFIG))
-    .pipe(rename({ prefix: "pretty." }))
-    .pipe(gulp.dest(OUTPUT_DIRECTORY));
+const configurations = {
+  'full': {
+    _ATTR: true,
+  },
+  'basic': {
+    _ATTR: false,
+  }
+};
+
+
+Object.keys(configurations).forEach(key  => {
+  gulp.task( key , () => {
+    return gulp
+      .src(SOURCE_FILE)
+      .pipe(babel(BABEL_CONFIG))
+      .pipe(terser({
+        ecma: 5,
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          inline: 1, // inline function body.
+          passes: 3, // number of times to re-compress.
+          unsafe: true,
+          global_defs: configurations[key]
+        },
+        mangle: {
+          properties: {
+            regex: /^(_terser_)/
+          }
+        },
+      }))
+      .pipe(rename({ suffix: `.${key}.min` }))
+      .pipe(size({showFiles: true}))
+      .pipe(size({showFiles: true, gzip: true}))
+      .pipe(gulp.dest(OUTPUT_DIRECTORY))
+      .pipe(beautify(BEAUTIFY_CONFIG))
+      .pipe(rename({ prefix: "pretty." }))
+      .pipe(gulp.dest(OUTPUT_DIRECTORY));
+  });
 });
+
+gulp.task('default',  gulp.parallel(Object.keys(configurations)));

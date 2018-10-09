@@ -1,4 +1,5 @@
-require('./dist/goolf.min');
+require('./dist/goolf.full.min');
+
 const $component = Goolf;
 
 function fragToHtml(frag) {
