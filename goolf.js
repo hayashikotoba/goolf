@@ -4,7 +4,7 @@ const ATTR_REGEX = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
 const TAG_RE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 
 // http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-const voidElements = _VOID_ELEMENTS;
+const voidElements = _VOID ? _VOID_ELEMENTS : null;
 const DELIMITER = _DELIMITER;
 
 // https://stackoverflow.com/questions/28199100/probability-of-getting-the-same-value-using-math-random/28220928#28220928
